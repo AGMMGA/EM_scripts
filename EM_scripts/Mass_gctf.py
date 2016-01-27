@@ -1,4 +1,14 @@
 import os
+import os, subprocess, progressbar
+from gi.overrides.keysyms import End
+
+
+try:
+    from subprocess import DEVNULL # py3k
+except ImportError:
+    import os
+    DEVNULL = open(os.devnull, 'wb')
+
 #'/processing/andrea/20151215_BRCA1_A/relion/Micrographs'
 # % gctf --apix 1.16 --kV 300 --Cs 0.01 --ac 0.1 20151215_BRCA1_A_001.mrc --do_EPA --do_validation
 
@@ -23,17 +33,26 @@ while not check:
     command = 'gctf --apix {Apix} --kV {kV} --Cs {Cs} --ac {Ac} [filename] --do_EPA'.format(**parameters)
     
     print ('The following command will be issued\n')
-    print '>', command
+    print ('>'), command
     print ('for all the files between {0} and {1}'.format(first_filename, last_filename))
     ans = raw_input('Is this correct? (y/n)')
     while (ans != 'y' and ans != 'n'):
-        print 'Please answer "y" or "n"'
+        print ('Please answer "y" or "n"')
         ans = raw_input('Is this correct? (y/n)')
     if ans == 'y':
         check = 1
     else:
-        print '\n'
-for i in range(parameters['first_file'],parameters['last_file']+1):
-    filename = (parameters['file_root'] + str(i).zfill(parameters['number_length']))
-    os.system('gctf --apix {Apix} --kV {kV} --Cs {Cs} --ac {Ac} {input} --do_EPA'.format(input=filename, \
-                                                        **parameters))
+        print ('\n')
+
+bar = progressbar.ProgressBar()
+        
+for i in bar(xrange(parameters['first_file'],parameters['last_file']+1)):
+    filename = (parameters['file_root'] + str(i).zfill(parameters['number_length']) 
+                + '.mrc')
+    if os.path.isfile(filename):
+        command = 'gctf --apix {Apix} --kV {kV} --Cs {Cs} --ac {Ac} {input} --do_EPA'.format(
+                    input=filename, **parameters).split()
+        p3 = subprocess.Popen(command, stdout=DEVNULL)
+        p3.communicate()  # makes it wait for the end before spawning the next
+    else:
+        print ('File {0} not found'.format(filename))
