@@ -9,8 +9,9 @@ except ImportError:
     import os
     DEVNULL = open(os.devnull, 'wb')
 
+
 #'/processing/andrea/20151215_BRCA1_A/relion/Micrographs'
-# % gctf --apix 1.16 --kV 300 --Cs 0.01 --ac 0.1 20151215_BRCA1_A_001.mrc --do_EPA --do_validation
+# % gctf --apix 1.04 --kV 300 --Cs 0.01 --ac 0.1 20151215_BRCA1_A_001.mrc --do_EPA --do_validation
 
 
 print ('this program automates gctf correction')

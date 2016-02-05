@@ -26,7 +26,7 @@ os.chdir(cwd)
 # n_files = [26, 70, 78]#, 82, 98, 106, 138, 142, 170, 182, 183]
 bar = progressbar.ProgressBar()
 
-for i in bar(xrange(2007)):
+for i in bar(xrange(100)):
     _filename = filename.format(str(i+1).zfill(4))
     new_filename = _filename.split('_movie.mrc')[0] + '.mrc'
     if not os.path.isfile(_filename):
