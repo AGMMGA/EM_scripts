@@ -1,11 +1,12 @@
 import os
+import random
 
 processing_dir = '/processing/andrea/20160126_BRCA1_GO/relion'
 base_filename = 'Micrographs/20160126_BRCA1_GO_{0}.mrc'
 starfile_in = os.path.join(processing_dir, 'micrographs_all_gctf.star')
-starfile_out = os.path.join(processing_dir, 'test.star')
+starfile_out = os.path.join(processing_dir, '200_random.star')
 digits = 4
-keep = range(1, 100)
+keep = [] #[i for i in random.sample(range(101, 2008), 200)]
 remove = []
 in_starfile = []
 
