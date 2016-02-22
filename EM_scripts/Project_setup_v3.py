@@ -72,7 +72,7 @@ def create_relion_folder_names(user, project, relion_folder):
                                       /@Micrographs
                                       /@Particles
     /processing/user/project/relion/@Class2D
-                                   /@Class3d
+                                   /@Class3D
                                    /@Refine3D
                                    /Particles
                                    /Micrographs
@@ -85,7 +85,7 @@ def create_relion_folder_names(user, project, relion_folder):
                                              relion_folder)
     dirs_to_create.append(base_relion_path_processing)
     dirs_to_create.append(base_relion_path_storage)
-    for i in ['Class2d', 'Class3d', 'Refine3d']:
+    for i in ['Class2D', 'Class3D', 'Refine3D']:
         dirs_to_create.append(os.path.join(base_relion_path_storage, i))
         target = os.path.join(base_relion_path_storage, i)
         link_name = os.path.join(base_relion_path_processing, i)

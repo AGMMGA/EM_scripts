@@ -152,12 +152,19 @@ def get_file_names(starfile_in):
                 # typical line in a star file:
                 # Micrographs/file_0001.mrc Micrographs/file_0001.ctf:mrc [bunch of numbers]
                 if not(line.startswith('Micrographs')):
-                    continue  #header of the starfile
+                    if line.endswith('.mrc\n'): #ctf starfile
+                        file_names.append(line.split('.mrc\n')[-2].split('/')[-1])
+                    else:
+                        continue  #header of the starfile
                 else:
                     file_names.append(line.split('/')[1].split('.mrc')[0])
     except IOError:
         print ('Please make sure that the star file exists and is accessible')
-    return file_names
+        sys.exit()
+    if file_names:
+        return file_names
+    else:
+        raise TypeError('Error reading starfile. Are you sure that the starfile is in the correct format?')
                 
 def write_starfile(data, starfile_in, starfile_out, mode='', 
                    threshold = ''):
@@ -167,7 +174,7 @@ def write_starfile(data, starfile_in, starfile_out, mode='',
     
     if mode == 'resolution':
         keep = []
-        digits = len(data[0].split('_')[-1])
+        digits = len(list(data.keys())[0].split('_')[-1])
         for file in data:
             if data[file]['resolution'] > threshold:
                 keep.append(file.split('_')[-1])
@@ -191,9 +198,7 @@ def main(starfile_in, processing_dir = '', ctffind_suffix = '_ctffind3',
         print ('Please specify the name of the input starfile')
         sys.exit()
     
-    
-    
-    #determine the estimated resolution from the _ctffin3.log file 
+    #determine the estimated resolution from the _ctffind3.log file 
     for file in file_names:  
         data[file] = {}  
         file_number = file.split('_')[-1]
@@ -276,13 +281,13 @@ if __name__ == '__main__':
         'print_pdf' : False,
         'do_gctf_sort' : True,
         'ptcl_suffix' : '_autopick',
-        'res_threshold' : 6, #Angstrom
+        'res_threshold' : 3.45, #Angstrom
         'ctffind_suffix' : '_ctffind3',
         'processing_dir' : '/processing/andrea/20160126_BRCA1_GO/relion/',
-        'starfile_in' : 'test.star',
-        'starfile_out' : 'test1.star',
-        'logfile_out' : 'test_logfile.txt',
-        'pdf_out' : 'test_pdf.pdf'}
+        'starfile_in' : 'scripting/test.star',
+        'starfile_out' : 'scripting/highres.star',
+        'logfile_out' : 'scripting/test_logfile.txt',
+        'pdf_out' : 'scripting/test_pdf.pdf'}
     
     main(**run_parameters)
          
