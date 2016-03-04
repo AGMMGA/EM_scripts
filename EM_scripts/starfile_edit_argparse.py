@@ -1,21 +1,50 @@
 import argparse
 import os
 import sys
+import shutil
 
 class args(object):
     
-    def __init__(self, starfile_in, starfile_out, filename, digits, lst, mode, force):
+    def __init__(self, starfile_in, starfile_out, filename, digits, lst, mode, force=False, move=None):
         super(args, self).__init__()
         self.i = starfile_in
         self.o = starfile_out
         self.filename = filename
         self.digits = digits
-        if mode == 'a':
-            self.a = lst
+        if not (mode=='k' or mode == 'r'):
+            raise ValueError('Wrong mode. Please specify ''k'' for keep or ''r'' for remove')
+        if mode == 'k':
+            self.k = lst
         if mode == 'r':
             self.r = lst
         self.f = force
+        self.move = move
         
+def get_filenumbers(filename):
+    '''
+    This function parses a file in which a bunch of numbers corresponding to rejected
+    micrographs are listed as a mixture of numbers and ranges, i.e.
+    1,2,3,4-6,45
+    It takes the file with the numbers and returns a list of file numbers 
+    ['1','2','3','4','5','6','45'] 
+    All non digits are removed
+    '''
+    temp = []
+    with open(filename, 'r') as f:
+        for line in f:
+            temp += line.split(',')
+    lst = []
+    for i in temp:
+        if i.find('-') != -1:
+            first, last = int(i.split('-')[0]), int(i.split('-')[-1])
+            lst += [str(i) for i in range(first, last+1)]
+        elif i.find('-') == -1:
+            lst.append(i.replace('\n', ''))
+        else: 
+            continue
+    
+    return [i for i in lst if i.isdigit()]
+
 def parse(args):
     #parsing command line arguments
     parser = argparse.ArgumentParser()
@@ -31,6 +60,7 @@ def parse(args):
                       type=int, nargs='+')
     parser.add_argument('-filename', help='Filename template', type=str)
     parser.add_argument('-f', '-force', help='Force overwrite of output', action='store_true')
+    parser.add_argument('-move_files', help='Move the rejected files to the specified folder')
     return parser.parse_args()
 
 def get_filename_from_star(starfile_in):
@@ -62,12 +92,21 @@ def _args_check(args):
         except:
             print ('I cannot determine the filename from the starfile.')
             print ('Please specify the filename with the --filename keyword')
+    try: #if the movefile option is specified, we check for the folder to exist
+        if args.move:
+            if not os.path.isdir(args.move):
+                raise IOError('The destination directory does not exist')
+            if args.mode != 'r':
+                raise ValueError('Moving only works in remove mode')
+    except AttributeError: # if args.move does not exist 
+        pass
+            
     return 1
-
+    
 def run_as_module(starfile_in, starfile_out, filename, digits, 
                   lst = [], mode='', force=False):
-    if not mode:
-        raise ValueError('Please specify "keep" or "remove" mode')
+    if not (mode=='k' or mode == 'r'):
+            raise ValueError('Wrong mode. Please specify ''k'' for keep or ''r'' for remove')
     if not lst:
         raise ValueError('Please give a list of files to add/remove')
     
@@ -80,13 +119,14 @@ def zerofill (lst, digits):
     zeroes up to a length given by the digits parameter'''
     if len(lst) == 0:
         return []
-    for i, n in enumerate(lst):
-        lst[i] = str(n).zfill(digits)
+    else:
+        lst = [str(i).zfill(digits) for i in lst]
     return lst
 
-def write_file(starfile_in, starfile_out, filename, digits, lst, mode='a'):
-    filename_base = filename.split('.mrc')[0][:-digits+1]
-    name_length = len(filename.split('.mrc'))
+def write_file(starfile_in, starfile_out, filename, digits, lst, mode='k',move='', force = False):
+    _, filename_base, __ = get_file_parts(filename)
+    #zerofilling the list if necessary
+    lst = zerofill(lst, digits)
     with open (starfile_in, 'r') as filein:
         with open (starfile_out, 'w') as fileout:
             for line in filein:
@@ -94,15 +134,16 @@ def write_file(starfile_in, starfile_out, filename, digits, lst, mode='a'):
                 if line.find(filename_base) == -1:
                     fileout.write(line)
                 else:
-                    beginning = line.find(filename_base) + name_length
-                    end = beginning + digits + 1
-                    filenumber = get_file_parts(line) #line[beginning:end]
-                    if mode == 'a':
+                    _, __, filenumber = get_file_parts(line) #line[beginning:end]
+                    if mode == 'k':
                         if filenumber in lst:
                             fileout.write(line)
                     if mode == 'r':
-                        if (filenumber) not in lst:
+                        if filenumber not in lst:
                             fileout.write(line)
+#                             if move:
+#                                 move_file(filename, move, force)
+                                
 
 def get_file_parts(line):#, filename):
     if line.find('.mrc') == -1: #some line from the header
@@ -123,13 +164,22 @@ def check_all_exist(starfile_in, filename, lst):
             if n not in present:
                 return 0
     return 1
-            
+
+# def move_file(filename, destination, force):
+#     filename_no_ext, _, __= get_file_parts(filename) 
+#     src = os.getcwd() + '/Micrographs/' + filename
+#     dst = os.path.join(destination, (filename_no_ext + '.removed'))
+#     if os.path.isfile(dst) and not force:
+#         raise IOError('Destination exists - please specify -force to overwrite')
+#     try:
+#         shutil.move(src, dst)
+#     except IOError:
+#         print ('error when moving file {}'.format(filename))
 
 def main(parsed_args): # an argparse namespace or equivalent
-    p=parsed_args # I am lazy
     try: # if in keep mode, parsed_args.k exists;
         filled = zerofill(parsed_args.k)
-        mode = 'a'
+        mode = 'k'
     except AttributeError:
         pass
     try: # if in remove mode, parsed_args.r exists instead
@@ -137,7 +187,7 @@ def main(parsed_args): # an argparse namespace or equivalent
         mode='r'
     except AttributeError:
         pass
-    
+    return 1
 #     if not check_all_exist(starfile_in, lst) and not parsed_args.f:
 #         raise ValueError('Some of the files in the list are not in the provided star file. Use -f to force continue')
 #     

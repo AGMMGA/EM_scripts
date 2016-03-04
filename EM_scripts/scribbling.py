@@ -1,42 +1,28 @@
-import os
-import matplotlib.pyplot as plt 
-import numpy as npy
-from matplotlib.backends.backend_pdf import PdfPages
-   
-  
-def on_pick(event):
-#     allows clicking of points in the figure
-    print ('{button} {x} {y} {xdata} {ydata}'.format( \
-        button=event.button, x=event.x, y=event.y, \
-        xdata=event.xdata, ydata=event.ydata))
-#     annotation.set_visible(True)    
-      
-from starfile_edit import main
-  
-# x = [1,2,3]
-# y = [2,4,6]
-# x2 = [i+1 for i in x]
-# x3 = [i+3 for i in x]
-# y2 = [j+1 for j in y]
-# y3 = [j+3 for j in y]
-# colors = ['red', 'green', 'blue']
-# labels = ['1','2','3']
-#  
-# fig1 = plt.figure(1)
-# ax1 = fig1.add_subplot(211) 
-# line1 = ax1.scatter(x,y, c='red', marker='p', s=100)
-# line2 = ax1.scatter(x2,y2, c='blue', marker='o', s=100)
-# line3 = ax1.scatter(x3,y3, c='green', marker='*', s=150)
-#  
-# for i,j in zip(x,y):
-#     annotation = ax1.annotate('Coord: {x}{y}'.format(x=i, y=j), xy=(i,j), xycoords='data')
-#     annotation.set_visible(True)
-# fig1.canvas.mpl_connect('button_press_event', on_pick)
-#  
-# plt.show()
+import sys, shlex, os, glob, shutil, subprocess
+# import e2proc2d as e2
+import starfile_edit_argparse_v2 as s
 
-keep = [1,2,3]
-remove = [4,5]
-processing_dir = '/processing/andrea/20160126_BRCA1_GO/relion'
-digits = 4
-main(remove = [1], processing_dir=processing_dir, digits=digits)
+def move_files(files_in):
+        for item in files_in:
+            line = files_in[item]
+            f,_,__  = s.starfleet_master.get_file_parts(line) # filename_no_ext
+            flist = ''
+            for i in ['0','1','2','3','4','5','6']:
+                flist += '/local_storage/michael/20160211_NucleoXlink/movie_frames/' + f + '_frames_n{}.mrc '.format(i)
+            e2proc2d_out = '/local_storage/michael/20160211_NucleoXlink/movie_frames/' + f + '_stacked.mrcs'
+            motioncorr_out = '/local_storage/michael/20160211_NucleoXlink/movies/' + f + '_corr.mrc'
+            command1 = 'python /Xsoftware64/EM/EMAN2/bin/e2proc2d.py {} {} --average'.format(flist,e2proc2d_out)
+            command2 = 'dosefgpu_driftcorr {} -fcs {}'.format(e2proc2d_out, motioncorr_out)
+            command3 = 'rm {}'.format(e2proc2d_out)
+            os.system(command1)
+            os.system(command2)
+            os.system(command3)
+            
+
+
+sys.argv = shlex.split('test.py -i /processing/michael/20160211_NucleoXlink/relion_2/good_micrographs_gctf.star -o /tmp/out.star -k 1 '+
+                               ' -digits 3 -filename 20160211_NucleoXlink_904.mrc')
+obj = s.starfleet_master(sys.argv)
+obj.read_star()
+move_files(obj.files_in)
+
