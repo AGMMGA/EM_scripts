@@ -379,24 +379,35 @@ _rlnMicrographName #11
         obj.write_star()
         with open(obj.o, 'r') as f:
             self.assertMultiLineEqual(f.read(), self.exp_ctf_starfile)
-#             
-#     def test_keep_mode_ctf_starfile(self):
-#         add = ['1','2']
-#         s.write_file(self.ctf_starfile_in, self.starfile_out, 
-#                      self.filename, self.digits, add, mode='k')
-#         with open(self.starfile_out, 'r') as f:
-#             self.assertMultiLineEqual(f.read(), self.exp_ctf_starfile)
-#             
-#     def test_remove_mode_ctf_starfile(self):
-#         remove = s.zerofill(['91','092'], 4)
-#         s.write_file(self.ctf_starfile_in, self.starfile_out, 
-#                      self.filename, self.digits, remove, mode='r')
-#         with open(self.starfile_out, 'r') as f:
-#             self.assertMultiLineEqual(f.read(), self.exp_ctf_starfile)
-#     
-#     def test_moving(self):
-#         self.assertEqual(0,1)
-#
+
+class test_check_all_exist(unittest.TestCase):
+    
+    def setUp(self):
+        for i in ['a_0001','a_0002','a_0092', 'a_0093']:
+            with open(('/tmp/'+i+'.mrc'), 'w+b'):
+                pass
+        sys.argv = shlex.split('test.py -i /tmp/in.star -o /tmp/out.star -k 1 2 92 93'+
+                               ' -digits 4 -filename a_0001.mrc -image_folder /tmp')
+        with open('/tmp/in.star', 'w') as f:
+            f.write(normal_starfile)
+        self.obj = s.starfleet_master(sys.argv)
+        h,f = self.obj.read_star()     
+    
+    def teardown(self):
+        for i in ['a_0001','a_0002','a_0092', 'a_0093']:
+            f = '/tmp/' + i + '.mrc'
+            if os.path.isfile(f):
+                os.remove(f)
+        del(self.obj)
+    
+    def test_all_exist_OK(self):
+        self.assertEqual(self.obj.check_all_exist(), 1)
+    
+    def test_file_missing(self):
+        if os.path.isfile('/tmp/a_0001.mrc'):
+            os.remove('/tmp/a_0001.mrc')
+        self.assertEqual(['/tmp/a_0001.mrc'], 
+                         self.obj.check_all_exist())
         
 # class test_run_as_module(unittest.TestCase):
 #     

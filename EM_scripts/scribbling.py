@@ -17,12 +17,32 @@ def move_files(files_in):
             os.system(command1)
             os.system(command2)
             os.system(command3)
-            
+
+os.chdir('/processing/michael/20160211_NucleoXlink/relion_gautomatch/Micrographs')
+files = glob.glob('*gctf*')
+for i in files:
+    dst = i.replace('gctf', 'ctffind3')
+    shutil.move(i, dst)
 
 
-sys.argv = shlex.split('test.py -i /processing/michael/20160211_NucleoXlink/relion_2/good_micrographs_gctf.star -o /tmp/out.star -k 1 '+
-                               ' -digits 3 -filename 20160211_NucleoXlink_904.mrc')
-obj = s.starfleet_master(sys.argv)
-obj.read_star()
-move_files(obj.files_in)
+# sys.argv = shlex.split('test.py -i /processing/michael/20160211_NucleoXlink/relion_gautomatch/good_micrographs.star -o /tmp/out.star -k 1 '+
+#                                ' -digits 3 -filename 20160211_NucleoXlink_904.mrc')
+# obj = s.starfleet_master(sys.argv)
+# obj.read_star()
+# keep = obj.spit_list()
+# obj.lst = keep
+# print (len(keep), len(obj.check_all_exist()))
+# for i in keep:
+#     src = '/local_storage/michael/20160211_NucleoXlink/movies/Micrographs/20160211_NucleoXlink_{}_corr.mrc'.format(i)
+#     dst = '/processing/michael/20160211_NucleoXlink/relion_gautomatch/Micrographs/20160211_NucleoXlink_{}.mrc'.format(i)
+#     try:
+#         shutil.move(src, dst)
+#     except IOError:
+#         print ('{} not found'.format(src))
 
+# sys.argv = shlex.split('test.py -i /processing/michael/20160211_NucleoXlink/relion_2/good_micrographs_gctf.star -o /local_storage/michael/20160211_NucleoXlink/movies/out.star -k 1 '+
+#                                ' -digits 3 -filename 20160211_NucleoXlink_904.mrc')
+# obj2 = s.starfleet_master(sys.argv)
+# obj2.lst = keep
+# obj2.read_star()
+# obj2.write_star()

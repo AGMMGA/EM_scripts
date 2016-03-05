@@ -53,7 +53,7 @@ class starfleet_master(object):
         self.parser.add_argument('-move_files', help='Move the rejected files to the specified folder')
         self.parser.add_argument('-s','-scrapbook', help='A file in which micrographs numbers have been loosely annotated')
         self.parser.add_argument('-image_folder', help='The folder where the images are located. Default: Micrographs/')
-        self.parser.parse_args(namespace=self) #adds the arguments to self
+        self.parser.parse_args(namespace=self) #adds the arguments to self. Missing parameters evaluate to False ([], 0, {} etc.)
         if self.k:
             self.mode = 'k'
             self.lst = self.zerofill(self.k, self.digits)
@@ -137,9 +137,41 @@ class starfleet_master(object):
                 f.write(self.files_to_write[i])
                 
     
-                  
+#     def move_files(files_in):
+#         for item in files_in:
+#             line = files_in[item]
+#             f,_,__  = s.starfleet_master.get_file_parts(line) # filename_no_ext
+#             flist = ''
+#             for i in ['0','1','2','3','4','5','6']:
+#                 flist += '/local_storage/michael/20160211_NucleoXlink/movie_frames/' + f + '_frames_n{}.mrc '.format(i)
+#             e2proc2d_out = '/local_storage/michael/20160211_NucleoXlink/movie_frames/' + f + '_stacked.mrcs'
+#             motioncorr_out = '/local_storage/michael/20160211_NucleoXlink/movies/' + f + '_corr.mrc'
+#             command1 = 'python /Xsoftware64/EM/EMAN2/bin/e2proc2d.py {} {} --average'.format(flist,e2proc2d_out)
+#             command2 = 'dosefgpu_driftcorr {} -fcs {}'.format(e2proc2d_out, motioncorr_out)
+#             command3 = 'rm {}'.format(e2proc2d_out)
+#             os.system(command1)
+#             os.system(command2)
+#             os.system(command3)
+
+    def spit_list(self):
+        return self.files_in.keys()
+    
+    def check_all_exist(self):
+        _, filename, __ = self.get_file_parts(self.filename)
+        filename += '{}'
+        missing = []
+        for file in self.lst:
+            f = os.path.join(self.image_folder, filename.format(file+'.mrc'))
+            if not os.path.isfile(f):
+                missing.append(f)
+        if not missing:
+            return 1
+        else: 
+            return missing
+              
     def main(self):
         self.readstar()
+        
     #                             if move:
     #                                 move_file(filename, move, force)    
     
@@ -190,17 +222,7 @@ class starfleet_master(object):
 #     
 
 #           
-#     def check_all_exist(self.parser.i, filename, lst):
-#         with open(self.parser.i, 'r') as f:
-#             present = []
-#             for line in f:
-#                 _, __, n = get_file_parts(line)
-#                 if n:
-#                     present.append(n)
-#             for n in lst:
-#                 if n not in present:
-#                     return 0
-#         return 1
+
 # 
 # # def move_file(filename, destination, force):
 # #     filename_no_ext, _, __= get_file_parts(filename) 
