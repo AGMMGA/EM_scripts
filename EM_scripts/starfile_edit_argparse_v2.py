@@ -50,11 +50,14 @@ class starfleet_master(object):
                             required=True)
         mode = self.parser.add_mutually_exclusive_group(required=True)
         mode.add_argument('-k','-keep', help='List of files from the input starfile that need to be kept',
-                          type=int, nargs='+')
+                          action='store_true')
         mode.add_argument('-r','-remove', help='List files from the input starfile that need to be kept',
-                          type=int, nargs='+')
-        mode.add_argument('-notes', help='A file containing a list of micrographs in a loose format')
-        self.parser.add_argument('-sql', help='A scipion micrograph selection in .sql format')
+                          action='store_true')
+        source = self.parser.add_mutually_exclusive_group(required=True)
+        source.add_argument('-sql', help='A scipion micrograph selection in .sql format')
+#         source.add_argument('-notes', help='A file containing a list of micrographs in a loose format')
+        source.add_argument('-files_list', help='List of files from the input starfile that need to be kept / removed (int)',
+                            nargs='*')
         self.parser.add_argument('-filename', help='Filename example. E.g. date_project_###.mrc', type=str,
                                  required = True)
         self.parser.add_argument('-f', '-force', help='Force overwrite of output', action='store_true')
@@ -64,10 +67,16 @@ class starfleet_master(object):
         self.parser.parse_args(namespace=self) #adds the arguments to self. Missing parameters evaluate to False ([], 0, {} etc.)
         if self.k:
             self.mode = 'k'
-            self.lst = self.zerofill(self.k, self.digits)
         if self.r:
-            self.mode = 'r'
-            self.lst = self.zerofill(self.r, self.digits)
+            self.mode='r'
+        if self.files_list:
+            self.lst = self.zerofill(self.files_list, self.digits)
+#         if self.notes: # to be ported from v1
+#             self.lst = self.zerofill(self.r, self.digits)
+        if self.sql:
+            if not os.path.isfile(self.sql):
+                raise IOError('the sql file does not exist')
+            self.lst = list(self.import_scipion_sql().keys())
         if self.image_folder:
             if not os.path.isdir(os.path.join(os.getcwd(), self.image_folder)) \
                 and not hasattr(self, 'f'):
@@ -104,7 +113,6 @@ class starfleet_master(object):
                     raise ValueError('Moving only works in remove mode')
         except AttributeError: # if self.move does not exist 
             pass
-                
         return 1
     
     def read_star(self):
@@ -146,8 +154,6 @@ class starfleet_master(object):
     
     def import_scipion_sql(self):
         file_list = {}
-        if not os.path.isfile(self.sql):
-            raise IOError('the sql file does not exist')
         with sqlite3.connect(self.sql) as conn:
             c = conn.cursor()
             for row in c.execute('SELECT c04 FROM Objects WHERE enabled=1'):
@@ -180,10 +186,10 @@ class starfleet_master(object):
         print (self.lst)
         self.write_star()
         
-if __name__ == '__main__':
+# if __name__ == '__main__':
 #     os.chdir('/local_storage/michael/20160308_nucleo_xlink_d2/scipion')
 #     sys.argv = shlex.split('test.py -i all_micrographs.star -o good_micrographs.star -r 1'+
 #                                ' -digits 4 -filename 20160308_nucleo_xlink_d2_0001_corr.mrc'+
 #                                ' -sql bad')
-    s = starfleet_master(sys.argv)
-    s.main()
+#     s = starfleet_master(sys.argv)
+#     s.main()
