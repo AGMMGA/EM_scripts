@@ -3,10 +3,11 @@ import os, getpass, time
 MOUNT_POINT_SSD = '/processing'
 MOUNT_POINT_STORAGE = '/local_storage'
 
+
 def _getuser():
     userdef = getpass.getuser()
-    print 'Please select a username. [default: {0}]'.format(userdef)
-    user = raw_input('>')
+    print ('Please select a username. [default: {0}]'.format(userdef))
+    user = input('>')
     if user == '':
         return userdef
     return user
@@ -14,15 +15,15 @@ def _getuser():
 def get_project_name():
     project_name = ''
     while project_name =='':
-        print 'Please specify the name of the project'
-        print 'The final directory will be [date]_[project]'
-        project_name = raw_input('>')
+        print( 'Please specify the name of the project')
+        print( 'The final directory will be [date]_[project]')
+        project_name = input('>')
     return project_name
 
 def get_date():
     curr_date = time.strftime("%Y%m%d")
-    print 'Insert the desired date for the project (YYYYMMDD) [{0}]'.format(curr_date)
-    date = raw_input('>')
+    print( 'Insert the desired date for the project (YYYYMMDD) [{0}]'.format(curr_date))
+    date = input('>')
     if date =='':
         return curr_date
     return date
@@ -31,15 +32,15 @@ def get_program_folder_names():
     check = 0
     while not check:
         print ('Please insert the name of the folder for relion processing ["relion"]')
-        relion_folder=raw_input('>')
+        relion_folder=input('>')
         if relion_folder == '':
             relion_folder = 'relion'
         print ('Please insert the name of the folder for eman2 processing ["eman2"]')
-        eman2_folder=raw_input('>')
+        eman2_folder=input('>')
         if eman2_folder == '' :
             eman2_folder = 'eman2'
         print ('Please insert the name of the folder for scipion processing ["scipion"]')
-        scipion_folder=raw_input('>')
+        scipion_folder=input('>')
         if scipion_folder == '' :
             scipion_folder = 'scipion'
         print ('''\nThe folders are:
@@ -51,12 +52,12 @@ def get_program_folder_names():
     return relion_folder, eman2_folder, scipion_folder
 
 def correct_y_n(msg=''):
-    print msg
+    print(msg)
     print ('Is this correct? (y/n)')
-    answer = raw_input('>')
+    answer = input('>')
     while not(answer == 'y' or answer == 'n'):
         print ('Please answer "y" or "n"')
-        answer = raw_input('>')
+        answer = input('>')
     if answer == 'n':
         print ('\n')
         return 0
@@ -141,7 +142,7 @@ def create_folders(folders_to_create):
     #I prefer not to use os.makedirs() to have more control 
     for folder in folders_to_create:
         try:    
-            os.mkdir(folder, 0777)
+            os.mkdir(folder)
         except OSError:       
             if not os.path.isdir(folder): 
                 raise
@@ -168,8 +169,8 @@ This script will setup your directories to take advantage of the SSD\n
         user = _getuser()
         date = get_date()
         project = '{0}_{1}'.format(date, get_project_name())
-        print '\n\nThe username is {0}'.format(user)
-        print 'The final project name will be {0}'.format(project)
+        print( '\n\nThe username is {0}'.format(user))
+        print( 'The final project name will be {0}'.format(project))
         check = correct_y_n()
     
     relion_folder, eman2_folder, scipion_folder = \

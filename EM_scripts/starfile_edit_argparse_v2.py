@@ -1,7 +1,11 @@
 import argparse
 import os
 import sys
-import shutil
+import shlex
+# import shutil
+import subprocess
+import sqlite3
+
 
 class starfleet_master(object):
     
@@ -19,7 +23,11 @@ class starfleet_master(object):
         if line.find('.mrc') == -1: #some line from the header
             return 0,0,0 
         filename_no_ext = line.split('.mrc')[0].split('/')[-1]
-        number = filename_no_ext.split('_')[-1]
+        bits = filename_no_ext.split('_')
+        for i in reversed(bits): #looks for the first block of numbers from the back
+            if i.isdigit():
+                number = i
+                break
         filename_no_number = filename_no_ext[:filename_no_ext.find(number)]
         return filename_no_ext, filename_no_number, number
     
@@ -31,8 +39,7 @@ class starfleet_master(object):
             return []
         else:
             lst = [str(i).zfill(int(digits)) for i in lst]
-        return lst
-    
+        return lst        
     def __init__(self, *args, **kwargs):
         super(starfleet_master, self).__init__()
         self.parser = argparse.ArgumentParser()
@@ -47,6 +54,7 @@ class starfleet_master(object):
         mode.add_argument('-r','-remove', help='List files from the input starfile that need to be kept',
                           type=int, nargs='+')
         mode.add_argument('-notes', help='A file containing a list of micrographs in a loose format')
+        self.parser.add_argument('-sql', help='A scipion micrograph selection in .sql format')
         self.parser.add_argument('-filename', help='Filename example. E.g. date_project_###.mrc', type=str,
                                  required = True)
         self.parser.add_argument('-f', '-force', help='Force overwrite of output', action='store_true')
@@ -114,8 +122,8 @@ class starfleet_master(object):
                 elif line.find('.mrc') != -1 and end_header:
                     _, __, number = self.get_file_parts(line)
                     self.files_in[number] = line
-                elif line.find('.mrc') == -1 and end_header and line != '\n':
-                    raise ValueError('something is wrong with the file format')
+#                 elif line.find('.mrc') == -1 and end_header and line != '\n':
+#                     raise ValueError('something is wrong with the file format')
         return self.header, self.files_in
     
     def write_star(self):
@@ -135,23 +143,17 @@ class starfleet_master(object):
             for i in sorted(self.files_to_write):
                 temp = (self.files_to_write[i])
                 f.write(self.files_to_write[i])
-                
     
-#     def move_files(files_in):
-#         for item in files_in:
-#             line = files_in[item]
-#             f,_,__  = s.starfleet_master.get_file_parts(line) # filename_no_ext
-#             flist = ''
-#             for i in ['0','1','2','3','4','5','6']:
-#                 flist += '/local_storage/michael/20160211_NucleoXlink/movie_frames/' + f + '_frames_n{}.mrc '.format(i)
-#             e2proc2d_out = '/local_storage/michael/20160211_NucleoXlink/movie_frames/' + f + '_stacked.mrcs'
-#             motioncorr_out = '/local_storage/michael/20160211_NucleoXlink/movies/' + f + '_corr.mrc'
-#             command1 = 'python /Xsoftware64/EM/EMAN2/bin/e2proc2d.py {} {} --average'.format(flist,e2proc2d_out)
-#             command2 = 'dosefgpu_driftcorr {} -fcs {}'.format(e2proc2d_out, motioncorr_out)
-#             command3 = 'rm {}'.format(e2proc2d_out)
-#             os.system(command1)
-#             os.system(command2)
-#             os.system(command3)
+    def import_scipion_sql(self):
+        file_list = {}
+        if not os.path.isfile(self.sql):
+            raise IOError('the sql file does not exist')
+        with sqlite3.connect(self.sql) as conn:
+            c = conn.cursor()
+            for row in c.execute('SELECT c04 FROM Objects WHERE enabled=1'):
+                file_list[self.get_file_parts(row[0])[2]] = \
+                            'Micrographs/' + self.get_file_parts(row[0])[0] + '.mrc'
+        return file_list
 
     def spit_list(self):
         return self.files_in.keys()
@@ -170,97 +172,18 @@ class starfleet_master(object):
             return missing
               
     def main(self):
-        self.readstar()
         
-    #                             if move:
-    #                                 move_file(filename, move, force)    
-    
-#     def get_filenumbers(self):
-#         '''
-#         This function parses a file in which a bunch of numbers corresponding to rejected
-#         micrographs are listed as a mixture of numbers and ranges, i.e.
-#         1,2,3,4-6,45
-#         It takes the file with the numbers and returns a list of file numbers 
-#         ['1','2','3','4','5','6','45'] 
-#         All non digits are removed
-#         '''
-#         temp = []
-#         with open(filename, 'r') as f:
-#             for line in f:
-#                 temp += line.split(',')
-#         lst = []
-#         for i in temp:
-#             if i.find('-') != -1:
-#                 first, last = int(i.split('-')[0]), int(i.split('-')[-1])
-#                 lst += [str(i) for i in range(first, last+1)]
-#             elif i.find('-') == -1:
-#                 lst.append(i.replace('\n', ''))
-#             else: 
-#                 continue
-#         
-#         return [i for i in lst if i.isdigit()]
-# 
-
-#                 
-#     
-#         
-#     def run_as_module(self.parser.i, self.parser.o, filename, digits, 
-#                       lst = [], mode='', force=False):
-#         if not (mode=='k' or mode == 'r'):
-#                 raise ValueError('Wrong mode. Please specify ''k'' for keep or ''r'' for remove')
-#         if not lst:
-#             raise ValueError('Please give a list of files to add/remove')
-#         
-#         parameters = args(self.parser.i, self.parser.o, filename, digits, lst, mode, force)
-#         parsed = _args_check(parameters)
-#         return main(parsed), parameters
-#     
-#     
-#     
-#     
-#                                     
-#     
-
-#           
-
-# 
-# # def move_file(filename, destination, force):
-# #     filename_no_ext, _, __= get_file_parts(filename) 
-# #     src = os.getcwd() + '/Micrographs/' + filename
-# #     dst = os.path.join(destination, (filename_no_ext + '.removed'))
-# #     if os.path.isfile(dst) and not force:
-# #         raise IOError('Destination exists - please specify -force to overwrite')
-# #     try:
-# #         shutil.move(src, dst)
-# #     except IOError:
-# #         print ('error when moving file {}'.format(filename))
-# 
-# def main(parsed_args): # an argparse namespace or equivalent
-#     try: # if in keep mode, parsed_args.k exists;
-#         filled = zerofill(parsed_args.k)
-#         mode = 'k'
-#     except AttributeError:
-#         pass
-#     try: # if in remove mode, parsed_args.r exists instead
-#         filled = zerofill(parsed_args.r)
-#         mode='r'
-#     except AttributeError:
-#         pass
-#     return 1
-# #     if not check_all_exist(self.parser.i, lst) and not parsed_args.f:
-# #         raise ValueError('Some of the files in the list are not in the provided star file. Use -f to force continue')
-# #     
-# #     try:
-# #         write_file(p.i, p.o, p.filename, p.digits, mode, filled)
-# #         return 1
-# #     except:
-# #         print ('Ooops something went wrong')
-#       
-# 
-# 
-# if __name__ == '__main__':
-#     a = starfleet_master(sys.argv)
-#     a.main()
-#     
-#     
-
+        self.read_star()
+        print (self.files_in)
+        self.lst = list(self.import_scipion_sql().keys())
+#         self.lst.sort()
+        print (self.lst)
+        self.write_star()
+        
+if __name__ == '__main__':
+#     os.chdir('/local_storage/michael/20160308_nucleo_xlink_d2/scipion')
+#     sys.argv = shlex.split('test.py -i all_micrographs.star -o good_micrographs.star -r 1'+
+#                                ' -digits 4 -filename 20160308_nucleo_xlink_d2_0001_corr.mrc'+
+#                                ' -sql bad')
+    s = starfleet_master(sys.argv)
+    s.main()

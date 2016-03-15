@@ -2,6 +2,7 @@ import sys
 import unittest
 import shlex
 import os
+import subprocess
 from unittest.mock import patch, MagicMock
 import starfile_edit_argparse_v2 as s
 
@@ -55,6 +56,19 @@ _rlnDefocusU #3
 _rlnDefocusV #4
 _rlnDefocusAngle #5
 _rlnVoltage #6
+
+'''
+sql_file = '''
+SQLite format 3
+Ytablesqlite_sequencesqlite_sequence
+CREATE TABLE sqlite_sequence(name,seq)
+[...]
+ NULL,c09  REAL DEFAULT NULL)
+2016-03-14 12:07:40
+Runs/000002_ProtImportMicrographs/extra/20160126_BRCA1_GO_0001.mrc?20160126_BRCA1_GO_0001.mrc
+2016-03-14 12:07:40
+Runs/000002_ProtImportMicrographs/extra/20160126_BRCA1_GO_0002.mrc?20160126_BRCA1_GO_0002.mrc
+2016-03-14 12:07:40
 
 '''
 
@@ -281,15 +295,15 @@ _rlnMicrographName #11
         self.assertEqual(self.ctf_files, obj.files_in)
         self.assertEqual(self.ctf_files, f)
         
-    def test_malformed_starfile(self):
-        sys.argv = shlex.split('test.py -i /tmp/in.star -o /tmp/out.star -k 1'+
-                               ' -digits 3 -filename 20160126_BRCA1_GO_0001.mrc')
-        with open('/tmp/in.star', 'w') as f:
-            f.write(ctf_starfile)
-            f.write('This is a wrong line')
-        obj = s.starfleet_master(sys.argv)
-        with self.assertRaises(ValueError):
-            obj.read_star()
+#     def test_malformed_starfile(self): #superseded by new version of function
+#         sys.argv = shlex.split('test.py -i /tmp/in.star -o /tmp/out.star -k 1'+
+#                                ' -digits 3 -filename 20160126_BRCA1_GO_0001.mrc')
+#         with open('/tmp/in.star', 'w') as f:
+#             f.write(ctf_starfile)
+#             f.write('This is a wrong line')
+#         obj = s.starfleet_master(sys.argv)
+#         with self.assertRaises(ValueError):
+#             obj.read_star()
 
 class test_write_file(unittest.TestCase):
      
@@ -408,127 +422,31 @@ class test_check_all_exist(unittest.TestCase):
             os.remove('/tmp/a_0001.mrc')
         self.assertEqual(['/tmp/a_0001.mrc'], 
                          self.obj.check_all_exist())
-        
-# class test_run_as_module(unittest.TestCase):
-#     
-#     def setUp(self):
-#         self.starfile_in = '/tmp/in.star'
-#         self.starfile_out = '/tmp/out.star'
-#         self.filename = '123_BRCA1_001.mrc'
-#         self.digits = 4
-#         self.star_in = open('/tmp/in.star', 'w+b')
-#         self.star_out = open('/tmp/out.star', 'w+b')
-#         
-#     def tearDown(self):
-#         if os.path.isfile('/tmp/in.star'):
-#             os.remove('/tmp/in.star')
-#         if os.path.isfile('/tmp/out.star'):
-#             os.remove('/tmp/out.star')
-#         
-#     def test_no_mode(self):
-#         with self.assertRaises(ValueError):
-#             s.run_as_module(self.starfile_in, self.starfile_out,
-#                 self.filename, self.digits, [1,2,3], None, force=True)
-#     
-#     def test_no_lst(self):
-#         with self.assertRaises(ValueError):
-#             s.run_as_module(self.starfile_in, self.starfile_out,
-#                 self.filename, self.digits, [], mode='k', force=True)
-#             
-#     def test_class_setup(self):
-#         _, self.argv = s.run_as_module(self.starfile_in, self.starfile_out,
-#                 self.filename, self.digits, [1,2,3], mode='k', force=True)
-#         self.assertTrue(hasattr(self.argv, 'i'))
-#         self.assertTrue(hasattr(self.argv, 'o'))
-#         self.assertTrue(hasattr(self.argv, 'filename'))
-#         self.assertTrue(hasattr(self.argv, 'digits'))
-#         self.assertTrue(hasattr(self.argv, 'f'))
-#         self.assertTrue(hasattr(self.argv, 'k'))
-#         self.assertEqual(self.argv.k, [1,2,3])
-#         _, self.argv2 = s.run_as_module(self.starfile_in, self.starfile_out,
-#                 self.filename, self.digits, [1,2,3], mode='r', force=True)
-#         self.assertEqual(self.argv2.r, [1,2,3])
-#         
 
-         
-
-# 
-# class test_check_all_exist(unittest.TestCase):
-#     
-#     def setUp(self):
-#         #star1 = normal starfile #star2 = ctf corrected starfile
-#         with open('/tmp/star1.star', 'w') as f:
-#             f.write(normal_starfile)        
-#         with open('/tmp/star2.star', 'w') as f:
-#             f.write(ctf_starfile)
-#         with open('/tmp/bad.star', 'w') as f:
-#             f.write(bad_starfile)
-#         
-#     def tearDown(self):
-#         if os.path.isfile('/tmp/star1.star'):
-#             os.remove('/tmp/star1.star')
-#         if os.path.isfile('/tmp/star2.star'):
-#             os.remove('/tmp/star2.star')
-#         if os.path.isfile('/tmp/bad.star'):
-#             os.remove('/tmp/bad.star')
-#     
-#     def test_yes_normal_starfile(self):
-#         self.assertTrue(s.check_all_exist('/tmp/star1.star', 
-#             '20160126_BRCA1_GO_0001.mrc', s.zerofill([1,2,91,92], 4)))
-#     
-#     def test_no_normal_starfile(self):
-#         self.assertFalse(s.check_all_exist('/tmp/star1.star', 
-#             '20160126_BRCA1_GO_0001.mrc', s.zerofill([1,2,91,93], 4)))
-#     
-#     def test_yes_ctf_starfile(self):
-#         self.assertTrue(s.check_all_exist('/tmp/star1.star', 
-#             '20160126_BRCA1_GO_0001.mrc', s.zerofill([1,2,91,92], 4)))
-#     
-#     def test_no_ctf_starfile(self):
-#         self.assertFalse(s.check_all_exist('/tmp/star1.star', 
-#             '20160126_BRCA1_GO_0001.mrc', s.zerofill([1,2,91,93], 4)))
-#     
-#     def test_bad_starfile(self):
-#         self.assertFalse(s.check_all_exist('/tmp/star1.star', 
-#             '20160126_BRCA1_GO_0001.mrc', s.zerofill([1,2,91,93], 4)))
-# 
-# class test_get_filenumbers(unittest.TestCase):
-#     
-#     def setUp(self):
-#         with open('/tmp/digits', 'w') as f:
-#             f.write('1,2,3')
-#         with open('/tmp/range', 'w') as f:
-#             f.write('1-3')
-#         with open('/tmp/mix', 'w') as f:
-#             f.write('1,2,3-5,blabla')
-#     
-#     def tearDown(self):
-#         files = ['digits', 'ranges', 'mix']
-#         for f in files:
-#             name = '/tmp/{}'.format(f)
-#             if os.path.isfile(name):
-#                 os.remove(name)
-#     
-#     def test_range(self):
-#         self.assertEqual(['1','2','3'], 
-#                          s.get_filenumbers('/tmp/range'))
-#     
-#     def test_digits(self):
-#         self.assertEqual(['1','2','3'],
-#                          s.get_filenumbers('/tmp/digits'))
-#         
-#     def test_mix(self):
-#         self.assertEqual(['1','2','3','4','5'],
-#                          s.get_filenumbers('/tmp/mix'))
-# 
-# class test_move_file(unittest.TestCase):
-#     
-#     def setUp(self):
-#         with open('/tmp/star1.star', 'w') as f:
-#             f.write(normal_starfile)
-#         
-#     def tearDown(self):
-#         if os.path.isfile('/tmp/star1.star'):
-#             os.remove('/tmp/star1.star')
+class test_import_scipion_sql(unittest.TestCase):
     
-            
+    def setUp(self):
+        sys.argv = shlex.split('test.py -i /tmp/in.star -o /tmp/out.star -k 1 2 92 93'+
+                               ' -digits 4 -filename a_0001.mrc -image_folder /tmp'+
+                               ' -sql /tmp/scipion.sql')
+        with open('/tmp/in.star', 'w') as f:
+            f.write(normal_starfile)
+        with open('/tmp/scipion.sql', 'w') as f:
+            f.write(sql_file)
+        self.obj = s.starfleet_master(sys.argv)
+        
+    def tearDown(self):
+        for i in ['/tmp/in.star','/tmp/scipion.sql']:
+            if os.path.isfile(i):
+                os.remove(i)
+
+    def test_file_not_exists(self):
+        if os.path.isfile('/tmp/scipion.sql'):
+            os.remove('/tmp/scipion.sql')
+        with self.assertRaises(IOError):
+            with patch('sys.stdout', new=MagicMock()):
+                self.obj.import_scipion_sql()
+                
+    def test_correct_list(self):
+        self.assertEqual(['0001','0002'], self.obj.import_scipion_sql())        
+        
