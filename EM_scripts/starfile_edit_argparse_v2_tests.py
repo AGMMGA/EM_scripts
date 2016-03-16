@@ -5,6 +5,7 @@ import os
 import subprocess
 from unittest.mock import patch, MagicMock
 import starfile_edit_argparse_v2 as s
+from contextlib import redirect_stdout
 
 g = s.starfleet_master.get_file_parts
 z = s.starfleet_master.zerofill
@@ -115,6 +116,20 @@ class test_init(unittest.TestCase):
         with self.assertRaises(IOError):
             with patch('sys.stdout', new=MagicMock()):
                     obj = s.starfleet_master(sys.argv)
+    
+    def test_no_sql_no_files_list(self):
+        sys.argv = shlex.split('test.py -i /tmp/in.star -o /tmp/out.star -k'+
+                               ' -digits 3 -filename DMY_ABC_0001.mrc')
+        with self.assertRaises(ValueError):
+            with patch('sys.stdout', new=MagicMock()):
+                    obj = s.starfleet_master(sys.argv)
+                    
+    def test_no_sql_no_files_list_make_ctf(self):
+        sys.argv = shlex.split('test.py -i /tmp/in.star -o /tmp/out.star '+
+                               ' -digits 3 -filename DMY_ABC_0001.mrc -make_ctf')
+        with open('/tmp/in.star','w'):
+            pass
+        self.assertTrue(s.starfleet_master(sys.argv).check)
     
 class test_args_check(unittest.TestCase):
           
@@ -305,16 +320,6 @@ _rlnMicrographName #11
         self.assertEqual(self.ctf_header, ''.join(h))
         self.assertEqual(self.ctf_files, obj.files_in)
         self.assertEqual(self.ctf_files, f)
-         
-#     def test_malformed_starfile(self): #superseded by new version of function
-#         sys.argv = shlex.split('test.py -i /tmp/in.star -o /tmp/out.star -k 1'+
-#                                ' -digits 3 -filename 20160126_BRCA1_GO_0001.mrc')
-#         with open('/tmp/in.star', 'w') as f:
-#             f.write(ctf_starfile)
-#             f.write('This is a wrong line')
-#         obj = s.starfleet_master(sys.argv)
-#         with self.assertRaises(ValueError):
-#             obj.read_star()
  
 class test_write_file(unittest.TestCase):
       
@@ -408,31 +413,40 @@ _rlnMicrographName #11
 class test_check_all_exist(unittest.TestCase):
      
     def setUp(self):
-        for i in ['a_0001','a_0002','a_0092', 'a_0093']:
-            with open(('/tmp/'+i+'.mrc'), 'w+b'):
+        for i in ['20160126_BRCA1_GO_0001.mrc',
+                  '20160126_BRCA1_GO_0002.mrc',
+                  '20160126_BRCA1_GO_0091.mrc',
+                  '20160126_BRCA1_GO_0092.mrc']:
+            
+            with open(('/tmp/'+i), 'w+b'):
                 pass
         sys.argv = shlex.split('test.py -i /tmp/in.star -o /tmp/out.star -k -files_list 1 2 92 93'+
-                               ' -digits 4 -filename a_0001.mrc -image_folder /tmp')
+                               ' -digits 4 -filename 20160126_BRCA1_GO_0001.mrc -image_folder /tmp')
         with open('/tmp/in.star', 'w') as f:
             f.write(normal_starfile)
         self.obj = s.starfleet_master(sys.argv)
         h,f = self.obj.read_star()     
      
     def teardown(self):
-        for i in ['a_0001','a_0002','a_0092', 'a_0093']:
-            f = '/tmp/' + i + '.mrc'
+        for i in ['20160126_BRCA1_GO_0001.mrc',
+                  '20160126_BRCA1_GO_0002.mrc',
+                  '20160126_BRCA1_GO_0091.mrc',
+                  '20160126_BRCA1_GO_0092.mrc']:
+            f = '/tmp/' + i
             if os.path.isfile(f):
                 os.remove(f)
         del(self.obj)
      
     def test_all_exist_OK(self):
-        self.assertEqual(self.obj.check_all_exist(), 1)
+        self.obj.read_star()
+        self.assertEqual(self.obj.check_all_exist(self.obj.files_in), 1)
      
     def test_file_missing(self):
-        if os.path.isfile('/tmp/a_0001.mrc'):
-            os.remove('/tmp/a_0001.mrc')
-        self.assertEqual(['/tmp/a_0001.mrc'], 
-                         self.obj.check_all_exist())
+        if os.path.isfile('/tmp/20160126_BRCA1_GO_0001.mrc'):
+            os.remove('/tmp/20160126_BRCA1_GO_0001.mrc')
+        self.obj.read_star()
+        self.assertEqual(['/tmp/20160126_BRCA1_GO_0001.mrc'], 
+                         self.obj.check_all_exist(self.obj.files_in))
  
 class test_import_scipion_sql(unittest.TestCase):
     
@@ -450,3 +464,49 @@ class test_import_scipion_sql(unittest.TestCase):
         for i in ['/tmp/in.star','/tmp/scipion.sql']:
             if os.path.isfile(i):
                 os.remove(i)
+
+class test_create_ctf(unittest.TestCase):
+    
+    def setUp(self):
+        sys.argv = shlex.split('test.py -i /tmp/in.star -o /tmp/out.star -make_ctf '+
+                               ' -digits 4 -filename 20160126_BRCA1_GO_0001.mrc')
+        self.epa_list = ['20160126_BRCA1_GO_0092_ctffind.log', '20160126_BRCA1_GO_0002_ctffind.log', 
+                    '20160126_BRCA1_GO_0091_ctffind.log', '20160126_BRCA1_GO_0001_ctffind.log']
+        with open('/tmp/in.star', 'w') as f:
+            f.write(normal_starfile)
+        self.obj = s.starfleet_master(sys.argv)
+        self.obj.read_star()
+        self.obj.create_epa_list()  
+              
+    def tearDown(self):
+        if os.path.isfile('/tmp/in.star'):
+            os.remove('/tmp/in.star')
+
+    def test_create_epa_list(self):
+        self.obj.read_star()
+        self.assertEqual(self.obj.create_epa_list().sort(), self.epa_list.sort())
+        
+    def test_missing_ctf_file(self):
+        self.obj.read_star()
+        self.obj.epa_files = self.obj.create_epa_list()        
+        for f in self.epa_list[:-2]:
+            with open(('/tmp/'+ f), 'w'):
+                pass
+        self.obj.f = False
+        with self.assertRaises(OSError):
+            with patch('sys.stdout', new=MagicMock()):
+                self.obj.write_ctf()
+    
+    def test_missing_ctf_file_and_force(self):
+        from io import StringIO
+        self.obj.read_star()
+        self.obj.epa_files = self.obj.create_epa_list()        
+        for f in self.epa_list[:-2]:
+            with open(('/tmp/'+ f), 'w'):
+                pass
+        self.obj.f = True
+        msg = 'I could not find the ctf correction for 20160126_BRCA1_GO_0001_ctffind.log'
+        self.out = StringIO()
+        with redirect_stdout(self.out):
+            self.obj.write_ctf() 
+            self.assertEqual(self.out.readline(), msg)

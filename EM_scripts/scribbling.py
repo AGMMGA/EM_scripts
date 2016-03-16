@@ -1,48 +1,53 @@
-import sys, shlex, os, glob, shutil, subprocess
-# import e2proc2d as e2
-import starfile_edit_argparse_v2 as s
+class yadda(object):
+    
+    def __init__(self):
+        super(yadda, self).__init__()
+        self.epa_files = ['/processing/michael/20160308_nucleo_xlink_d2/relion/Micrographs/20160308_nucleo_xlink_d2_0278_corr_ctffind3.log',
+                          '/processing/michael/20160308_nucleo_xlink_d2/relion/Micrographs/20160308_nucleo_xlink_d2_0279_corr_ctffind3.log']
+    
+    def parse_EPA(self):
+        self.p_float = {}
+        for i in self.epa_files:
+            with open(i, 'r') as epa:
+                p = {}
+                while True:
+                    line= epa.readline()
+                    if not line:
+                        break
+                    if 'Input image file name' in line:
+                        p['image_in'] = epa.readline().strip()
+                    if 'Output diagnostic file name' in line:
+                        p['ctf_out'] = epa.readline().strip()
+                    if 'CS[mm], HT[kV], AmpCnst, XMAG, DStep[um]' in line:
+                        p['Cs'], p['kV'], p['AC'], p['XMAG'], p['Dstep'] = epa.readline().split()
+                    if 'Box, ResMin[A], ResMax[A]' in line:
+                        p['box'], p['resmin'], p['resmax'], p['dfmin'], p['dfmax'], \
+                        p['fstep'], p['dast'] = epa.readline().split()
+                    if 'Defocus_U   Defocus_V       Angle         CCC' in line:
+                        p['defU'], p['defV'], p['angle'], p['CCC'] = epa.readline().split()[:-2]
+                    if 'Resolution limit estimated by EPA:' in line:
+                        p['res'] = line.split()[-1]
+                p_float = {}
+                for key in p:
+                    if key not in ['image_in', 'ctf_out']:
+                        p_float[key]= float(p[key])
+                    else:
+                        p_float[key] = p[key]
+                self.p_float[i] = p_float
+        return self.p_float
 
-def move_files(files_in):
-        for item in files_in:
-            line = files_in[item]
-            f,_,__  = s.starfleet_master.get_file_parts(line) # filename_no_ext
-            flist = ''
-            for i in ['0','1','2','3','4','5','6']:
-                flist += '/local_storage/michael/20160211_NucleoXlink/movie_frames/' + f + '_frames_n{}.mrc '.format(i)
-            e2proc2d_out = '/local_storage/michael/20160211_NucleoXlink/movie_frames/' + f + '_stacked.mrcs'
-            motioncorr_out = '/local_storage/michael/20160211_NucleoXlink/movies/' + f + '_corr.mrc'
-            command1 = 'python /Xsoftware64/EM/EMAN2/bin/e2proc2d.py {} {} --average'.format(flist,e2proc2d_out)
-            command2 = 'dosefgpu_driftcorr {} -fcs {}'.format(e2proc2d_out, motioncorr_out)
-            command3 = 'rm {}'.format(e2proc2d_out)
-            os.system(command1)
-            os.system(command2)
-            os.system(command3)
-
-os.chdir('/processing/michael/20160211_NucleoXlink/relion_gautomatch/Micrographs')
-files = glob.glob('*gctf*')
-for i in files:
-    dst = i.replace('gctf', 'ctffind3')
-    shutil.move(i, dst)
-
-
-# sys.argv = shlex.split('test.py -i /processing/michael/20160211_NucleoXlink/relion_gautomatch/good_micrographs.star -o /tmp/out.star -k 1 '+
-#                                ' -digits 3 -filename 20160211_NucleoXlink_904.mrc')
-# obj = s.starfleet_master(sys.argv)
-# obj.read_star()
-# keep = obj.spit_list()
-# obj.lst = keep
-# print (len(keep), len(obj.check_all_exist()))
-# for i in keep:
-#     src = '/local_storage/michael/20160211_NucleoXlink/movies/Micrographs/20160211_NucleoXlink_{}_corr.mrc'.format(i)
-#     dst = '/processing/michael/20160211_NucleoXlink/relion_gautomatch/Micrographs/20160211_NucleoXlink_{}.mrc'.format(i)
-#     try:
-#         shutil.move(src, dst)
-#     except IOError:
-#         print ('{} not found'.format(src))
-
-# sys.argv = shlex.split('test.py -i /processing/michael/20160211_NucleoXlink/relion_2/good_micrographs_gctf.star -o /local_storage/michael/20160211_NucleoXlink/movies/out.star -k 1 '+
-#                                ' -digits 3 -filename 20160211_NucleoXlink_904.mrc')
-# obj2 = s.starfleet_master(sys.argv)
-# obj2.lst = keep
-# obj2.read_star()
-# obj2.write_star()
+    def make_ctf_line(self, i):
+        line = '{image_in} {ctf_out}:mrc {defU:.6f} {defV:.6f}    {angle:.6f}   {kV:.6f}     {Cs:.6f}     {AC:.6f} {XMAG:.6f}    {Dstep:.6f}     {CCC:.6f}     {res:.6f}\n'.format(**self.p_float[i])
+        return line
+            
+t278 = 'Micrographs/20160308_nucleo_xlink_d2_0278_corr.mrc Micrographs/20160308_nucleo_xlink_d2_0278_corr.ctf:mrc 34078.136719 34476.722656    65.307114   300.000000     2.700000     0.100000 125000.000000    14.000000     0.115909     4.354611\n'
+t279 = 'Micrographs/20160308_nucleo_xlink_d2_0279_corr.mrc Micrographs/20160308_nucleo_xlink_d2_0279_corr.ctf:mrc 23189.490234 22929.724609    11.026253   300.000000     2.700000     0.100000 125000.000000    14.000000     0.117471     3.886334\n'                                                                           
+y = yadda()
+y.parse_EPA()
+d0 = y.make_ctf_line(y.p_float.keys()[0])
+d1 = y.make_ctf_line(y.p_float.keys()[1]) 
+with open('/tmp/temp.txt','w') as l:
+    l.write(d0)
+    l.write(t278)
+    l.write(d1)
+    l.write(t279)
