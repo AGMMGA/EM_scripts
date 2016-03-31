@@ -6,6 +6,7 @@ import subprocess
 from unittest.mock import patch, MagicMock
 import starfile_edit_argparse_v2 as s
 from contextlib import redirect_stdout
+from glob import glob
 
 g = s.starfleet_master.get_file_parts
 z = s.starfleet_master.zerofill
@@ -481,6 +482,9 @@ class test_create_ctf(unittest.TestCase):
     def tearDown(self):
         if os.path.isfile('/tmp/in.star'):
             os.remove('/tmp/in.star')
+        if os.path.isdir('/tmp/Micrographs'):
+            os.remove(glob('/tmp/Micrographs/*.log'))
+            os.rmdir('/tmp/Micrographs')
 
     def test_create_epa_list(self):
         self.obj.read_star()
@@ -498,15 +502,20 @@ class test_create_ctf(unittest.TestCase):
                 self.obj.write_ctf()
     
     def test_missing_ctf_file_and_force(self):
+        self.maxDiff = None
         from io import StringIO
         self.obj.read_star()
-        self.obj.epa_files = self.obj.create_epa_list()        
+        self.obj.epa_files = self.obj.create_epa_list()
+        os.makedirs('/tmp/Micrographs')        
+        os.chdir('/tmp')
         for f in self.epa_list[:-2]:
-            with open(('/tmp/'+ f), 'w'):
+            with open(('/tmp/Micrographs/' + f), 'w') as d:
                 pass
+        
         self.obj.f = True
-        msg = 'I could not find the ctf correction for 20160126_BRCA1_GO_0001_ctffind.log'
+        msg = 'I could not find the ctf correction for Micrographs/20160126_BRCA1_GO_0001_ctffind.mrc'
         self.out = StringIO()
         with redirect_stdout(self.out):
             self.obj.write_ctf() 
-            self.assertEqual(self.out.readline(), msg)
+            print (self.out.getvalue())
+            self.assertEqual(self.out.getvalue(), msg)

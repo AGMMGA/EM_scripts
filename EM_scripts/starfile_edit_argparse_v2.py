@@ -67,7 +67,7 @@ class starfleet_master(object):
         parser.add_argument('-s','-scrapbook', help='A file in which micrographs numbers have been loosely annotated')
         parser.add_argument('-image_folder', help='The folder where the images are located. Default: Micrographs/')
         
-        parser.add_argument('-ctf_suffix', help='The suffix of the ctf correction logfiles. Do not add the underscore. Default: ctffind3.log')
+        parser.add_argument('-ctf_suffix', help='The suffix of the ctf correction logfiles. Default: _ctffind3.log')
         parser.parse_args(namespace=self) #adds the arguments to self. Missing parameters evaluate to False ([], 0, {} etc.)
         return parser
     
@@ -83,7 +83,7 @@ class starfleet_master(object):
             if not(self.sql or self.files_list):
                 raise ValueError('Please specify either -files_list or -sql')
         if not self.ctf_suffix:
-            self.ctf_suffix = 'ctffind'
+            self.ctf_suffix = '_ctffind'
         else: #removing extension if present
             self.ctf_suffix = self.ctf_suffix.remove('.log')
         if self.files_list:
@@ -184,7 +184,7 @@ class starfleet_master(object):
         filename += '{}'
         missing = []
         for file in lst:
-            f = os.path.join(self.image_folder, filename.format(file +suffix +ext))
+            f = os.path.join(self.image_folder, filename.format(file + suffix +ext))
             if not os.path.isfile(f):
                 missing.append(f)
         if not missing:
@@ -195,8 +195,8 @@ class starfleet_master(object):
     def create_epa_list(self):
         epa_files = []
         for f in self.files_in.keys():
-            epa_files.append(self.get_file_parts(self.filename)[1] + f + 
-                                  '_{}'.format(self.ctf_suffix))
+            epa_files.append(f)#self.get_file_parts(self.filename)[2])# + f + 
+#                                   '_{}'.format(self.ctf_suffix))
         return epa_files
     
     def write_ctf(self):
