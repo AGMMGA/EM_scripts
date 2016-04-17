@@ -7,14 +7,12 @@ class classifier(object):
     def __init__(self):
         super(classifier, self).__init__()
         
-    def make_dataset(self):
+    def make_dataset(self, good_img_path, bad_img_path):
         # returns a dict of {path/to/file/filename: 1/0}
         data = {}        
-        good_files_folder = '/processing/michael/20160211_NucleoXlink/relion_gautomatch/Micrographs/jpegs'
-        for i in glob.glob(os.path.join(good_files_folder, '*.jpg')):
+        for i in glob.glob(os.path.join(good_img_path, '*.jpg')):
             data[i] = 1
-        bad_files_folder = '/local_storage/michael/20160211_NucleoXlink/bad_frames/jpeg'
-        for i in glob.glob(os.path.join(bad_files_folder, '*.jpg')):
+        for i in glob.glob(os.path.join(bad_img_path, '*.jpg')):
             data[i] = 0
         return data
     
@@ -32,6 +30,8 @@ class classifier(object):
         return X,Y
         
     def main(self):
+        good_img_path = '/processing/michael/20160211_NucleoXlink/relion_gautomatch/Micrographs/jpegs'
+        bad_img_path = '/local_storage/michael/20160211_NucleoXlink/bad_frames/jpeg'
         data = self.make_dataset()
         X,Y = self.process_data(data)
         

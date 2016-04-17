@@ -1,6 +1,16 @@
-import unittest
+#!/usr/bin/python2.7
+
+#python2 compatibility - needed to make python3 compatible with python 2.7
+#otherwise e2proc2d will refuse to run
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
+from builtins import *
+
+import glob
 import os
 import sys
+import tempfile
+import unittest
 from unittest.mock import patch
 from testfixtures import TempDirectory
 from Process_movies_argparse import movie_processor as m
@@ -29,8 +39,7 @@ class test_check_args(unittest.TestCase):
         testargs = 'foo.py -filename 1_a_#.mrc'.split()
         with patch('sys.argv', testargs):
             obj = m()
-            exp = os.path.join(os.getcwd(), 'integrated')
-            self.assertEqual(exp, obj.output_dir)
+            self.assertEqual(obj.frames_dir, obj.output_dir)
            
     def test_output_dir_creation(self):
         testargs = 'foo.py -filename 1_a_#.mrc -output_dir /tmp/tmp'.split()
@@ -50,7 +59,7 @@ class test_check_args(unittest.TestCase):
         testargs = 'foo.py -filename 1_a_#.mrc -frames_suffix _n#'.split()
         with patch('sys.argv', testargs):
             obj = m()
-            exp = '_n{}'
+            exp = 'n{}'
             self.assertEqual(exp, obj.frames_suffix)
             
     def test_no_hash_in_frame_suffix(self):
@@ -58,6 +67,13 @@ class test_check_args(unittest.TestCase):
         with patch('sys.argv', testargs):
             with self.assertRaises(SystemExit):
                 obj = m()
+                
+    def test_non_frames_suffix_starting_underscore(self):
+        testargs = 'foo.py -filename 1_a_#.mrc -frames_suffix _n#'.split()
+        with patch('sys.argv', testargs):
+            obj = m()
+            exp = 'n{}'
+            self.assertEqual(exp, obj.frames_suffix)
                 
     def test_no_frame_specification_default(self):
         testargs = 'foo.py -filename 1_a_#.mrc'.split()
@@ -97,6 +113,7 @@ class test_check_args(unittest.TestCase):
         with patch('sys.argv', testargs):
             obj = m()
             self.assertEqual(3, obj.digits)
+            
     def test_no_hash_in_filename(self):
         testargs = 'foo.py -filename 1_a_.mrc'.split()
         with patch('sys.argv', testargs):
@@ -117,4 +134,117 @@ class test_init(unittest.TestCase):
             obj = m()
             self.assertEqual('1_a_{}_frames_n{}', obj.frame_name)
     
+class test_get_file_list(unittest.TestCase):
+    
+    def setUp(self):
+        self.testfiles = ['1_a_001_frames_n{}.mrc'.format(str(i)) \
+                          for i in range (7)]
+        self.tempdir = tempfile.mkdtemp()
+        for i in self.testfiles:
+            f= open(os.path.join(self.tempdir, i), 'w')
+        
+    def tearDown(self):
+        for i in self.testfiles:
+            f = os.path.join(self.tempdir, i)
+            if os.path.isfile(f):
+                os.remove(f)
+        if os.path.isdir(self.tempdir):
+            os.rmdir(self.tempdir)
+            
+    def test(self):
+        testargs = 'foo.py -filename 1_a_###.mrc'.split()
+        exp = [os.path.join(self.tempdir, i) for i in self.testfiles].sort()
+        with patch('sys.argv', testargs):
+            obj = m()
+            obj.frames_dir = self.tempdir
+        self.assertEqual(exp, obj.get_minimal_set(obj.get_file_list()).sort())
+
+class test_check_all_present(unittest.TestCase):
+    
+    def setUp(self):
+        self.testfiles = ['1_a_001_frames_n{}.mrc'.format(str(i)) \
+                          for i in range (7)]
+        self.testfiles_missing = ['1_a_002_frames_n{}.mrc'.format(str(i)) \
+                          for i in range (5)]
+        self.tempdir = tempfile.mkdtemp()
+        for i in (self.testfiles):
+            f= open(os.path.join(self.tempdir, i), 'w')
+        
+    def tearDown(self):
+        for i in glob.glob(os.path.join(self.tempdir, '*')):
+            f = os.path.join(self.tempdir, i)
+            if os.path.isfile(f):
+                os.remove(f)
+        if os.path.isdir(self.tempdir):
+            os.rmdir(self.tempdir)
+            
+    def test_all_present(self):
+        testargs = 'foo.py -filename 1_a_###.mrc -frames_dir {}'.format(self.tempdir)
+        testargs = testargs.split()
+        with patch('sys.argv', testargs):                
+            obj = m()
+            l = obj.get_minimal_set(obj.get_file_list())
+            self.assertTrue(obj.check_all_present(l))
+    
+    def test_missing_frames_no_force(self):
+        testargs = 'foo.py -filename 1_a_###.mrc -frames_dir {}'.format(self.tempdir)
+        testargs = testargs.split()
+        for i in (self.testfiles_missing):
+            f= open(os.path.join(self.tempdir, i), 'w')
+        with patch('sys.argv', testargs):                
+            obj = m()
+            l = obj.get_minimal_set(obj.get_file_list())
+            with self.assertRaises(SystemExit):
+                obj.check_all_present(l)    
+                
+    def test_missing_frames_with_force(self):
+        testargs = 'foo.py -filename 1_a_###.mrc -frames_dir {} -f'.format(self.tempdir)
+        testargs = testargs.split()
+        for i in (self.testfiles_missing):
+            f= open(os.path.join(self.tempdir, i), 'w')
+        exp = [os.path.join(self.tempdir, '1_a_002_frames_n6.mrc'),
+               os.path.join(self.tempdir, '1_a_002_frames_n5.mrc')]
+        with patch('sys.argv', testargs):                
+            obj = m()
+            l = obj.get_minimal_set(obj.get_file_list())
+            self.assertFalse(obj.check_all_present(l))
+            self.assertEqual(exp.sort(), obj.missing.sort())
+            
+    def test_all_present_with_custom_frames(self):
+        testargs = 'foo.py -filename 1_a_###.mrc  -frames_dir {} -first_last 1,2'
+        testargs = testargs.format(self.tempdir).split()
+        with patch('sys.argv', testargs):                
+            obj = m()
+            l = obj.get_minimal_set(obj.get_file_list())
+            self.assertTrue(obj.check_all_present(l))
+    
+    def test_missing_frames_with_custom_frames_and_force(self):
+        testargs = 'foo.py -filename 1_a_###.mrc -frames_dir {} -first_last 4,6 -f'
+        testargs = testargs.format(self.tempdir).split()
+        for i in ['1_a_002_frames_n6.mrc','1_a_002_frames_n5.mrc']:
+            open(i,'w')
+            f= open(os.path.join(self.tempdir, i), 'w')
+        exp = [os.path.join(self.tempdir, '1_a_002_frames_n4.mrc')]
+        with patch('sys.argv', testargs):                
+            obj = m()
+            l = obj.get_minimal_set(obj.get_file_list())
+            self.assertFalse(obj.check_all_present(l))
+            self.assertEqual(exp.sort(), obj.missing.sort())
+            
+    def test_missing_frames_with_custom_frames_no_force(self):
+        testargs = 'foo.py -filename 1_a_###.mrc -frames_dir {} -first_last 4,6'
+        testargs = testargs.format(self.tempdir).split()
+        for i in ['1_a_002_frames_n6.mrc','1_a_002_frames_n5.mrc']:
+            open(i,'w')
+            f= open(os.path.join(self.tempdir, i), 'w')
+        with patch('sys.argv', testargs):                
+            obj = m()
+            l = obj.get_minimal_set(obj.get_file_list())
+            with self.assertRaises(SystemExit):
+                obj.check_all_present(l)
+
+class test_make_stack(unittest.TestCase):
+    
+    # implement this I am tired
+
     

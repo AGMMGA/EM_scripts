@@ -1,7 +1,20 @@
-import sys, shlex, os, glob, shutil, subprocess
-import starfile_edit_argparse_v2 as s
+#!/usr/bin/python2.7
+
+#python2 compatibility - needed to make python3 compatible with python 2.7
+#otherwise e2proc2d will refuse to run
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
+from builtins import *
+
 import argparse
+import glob
+import logging
+import os
+import subprocess
+import sys
 from math import ceil, log10
+
+
 class movie_processor(object):
     
     def __init__(self):
@@ -45,9 +58,9 @@ class movie_processor(object):
             sys.exit('-frames_dir does not exist')
         
         if not self.output_dir:
-            self.output_dir = os.path.join(os.getcwd(), 'integrated')
+            self.output_dir = self.frames_dir
         if not os.path.isdir(self.output_dir):
-            os.makedirs(self.output_dir, exist_ok=True)
+            os.makedirs(self.output_dir)
         #checking if we need to integrate different frames
         if self.n_frames:
             self.first_frame = 0
@@ -78,6 +91,8 @@ class movie_processor(object):
                 #we happily ignore the number of '#' provided by the user
                 #but we must remove all '#' except one for the program to work
                 #hence the regexp hack
+                if self.frames_suffix.startswith('_'):
+                    self.frames_suffix = self.frames_suffix[1:]
                 import re
                 temp = self.frames_suffix
                 for pos in re.findall(re.compile('#'), self.frames_suffix)[1:]:
@@ -95,42 +110,102 @@ class movie_processor(object):
         return 1
     
     def get_file_list(self):
-        micrograph_pattern = '?'*self.digits
-        frames_pattern = '?'*(ceil(log10(self.last_frame-self.first_frame))) 
+        micrographs_wildcard = '?'*self.digits
+        frames_wildcard = '?'*int((ceil(log10(self.last_frame-self.first_frame)))) 
         file_pattern = os.path.join(self.frames_dir, self.frame_name.format( \
-                    micrograph_pattern, frames_pattern))        
+                    micrographs_wildcard, frames_wildcard)) + '.mrc'       
         return glob.glob(file_pattern)
+    
+    def get_minimal_set(self, file_list):
+        #looking for 1_a_###_ from 1_a_###_frames_n0.mrc
+        root_files = [i.strip('.mrc') for i in file_list]
+        root_files = [i.split(self.frames_suffix[:-2])[0].split('/')[-1].strip('_') \
+                      for i in root_files]
+        return list(set(root_files))
+            
+    def check_all_present(self, root_names):
+        self.missing = []
+        for root in root_names:
+            for n in range (self.first_frame, self.last_frame+1):
+                frame_name = root + '_' + self.frames_suffix.format(n) + '.mrc'
+                f = os.path.join(self.frames_dir, frame_name)
+                if not os.path.isfile(f):
+                    if not self.f:
+                        msg = 'Frame {} is missing. Aborting.Use -f to force'.format(n)                          
+                        sys.exit(msg)
+                    else:
+                        self.missing.append(frame_name)
+        if self.missing:
+            return 0
+        else:
+            return 1
         
-        
+    def process_files(self, root_names):
+        for item in root_names:
+            try:
+                frame_name = item + '_' + self.frames_suffix
+                e2proc2d_out = os.path.join(self.output_dir, 'temp_stacked.mrcs')
+                motioncorr_out = os.path.join(self.output_dir, item + '.mrc')
+                frame_list = []
+                #generating a list of frames to pas to e2proc2d.py
+                for i in [str(i) for i in range(self.first_frame, self.last_frame+1)]:
+                    frame_list.append(os.path.join(self.frames_dir,
+                                      frame_name.format(i) + '.mrc'))
+                #stacking the frames in a temporary file
+                e2_out, e2_err = self.make_stack(frame_list, e2proc2d_out)
+                #doing motion correction
+                mc_out, mc_err = self.motion_correct_stack(e2proc2d_out, motioncorr_out)
+                if mc_out.splitlines()[-1] == 'Done.':
+                    logging.info(mc_out.splitlines()[-2])
+            #removing temp file
+            finally:
+                if os.path.isfile(e2proc2d_out):
+                    self.clean_up(e2proc2d_out)
+    
+    def make_stack(self, frame_list, stack):
+        command1 = '/usr/bin/python2.7 /Xsoftware64/EM/EMAN2/bin/e2proc2d.py {} ' \
+                       '{} --average'.format(' '.join(frame_list), stack).split()
+        p = subprocess.Popen(command1, stdout=subprocess.PIPE, stderr = subprocess.PIPE)
+        print ('Stacking frames {} to {}'.format(frame_list[0].split('/')[-1], 
+                                                 frame_list[-1].split('/')[-1]))
+        return p.communicate()
+    
+    def motion_correct_stack(self, stack, output):
+        command2 = 'dosefgpu_driftcorr {} -fcs {}'.format(
+                        stack, output)
+        p = subprocess.Popen(command2.split(), stdout=subprocess.PIPE, stderr = subprocess.PIPE)
+        print ('Correcting frame {}'.format(output.split('/')[-1]))
+        return p.communicate()
+    
+    def clean_up(self, stack):
+        try:
+            os.remove(stack)
+        except IOError:
+            pass
+    
+    def start_logger(self):
+        log = os.path.join(self.output_dir, 'process_movies.log')
+        logger = logging.getLogger(__name__) 
+        logging.basicConfig(filename = log, level=logging.INFO)
+        return logger
+                
     def main(self):
+        self.start_logger()
         self.file_list = self.get_file_list()
-        print (self.file_list)
+        self.root_names = self.get_minimal_set(self.file_list)
+        if self.check_all_present(self.root_names):
+            self.process_files(self.root_names)
+        else:
+            pass #implement force option
+        print('All Done!. Check the logfile for details')
+            
 #         frame_pattern = self.frame_base.replace('{}', '?'*self.digits) + '.mrc'
 #         file_list = glob.glob(os.path.join(self.frames_dir, frame_pattern))
 #         file_numbers = [i[len(self.file_base):-len(self.frames_suffix)] \
 #                         for i in file_list]
 #         print (file_numbers)
         
-    def move_files(self, files_in):
-        for item in files_in:
-            line = files_in[item]
-            f,_,__  = s.starfleet_master.get_file_parts(line) # filename_no_ext
-            flist = ''
-            for i in ['0','1','2','3','4','5','6']:
-                flist += '/local_storage/michael/20160211_NucleoXlink/movie_frames/' \
-                         + f + '_frames_n{}.mrc '.format(i)
-            e2proc2d_out = '/local_storage/michael/20160211_NucleoXlink/movie_frames/' \
-                           + f + '_stacked.mrcs'
-            motioncorr_out = '/local_storage/michael/20160211_NucleoXlink/movies/' \
-                             + f + '_corr.mrc'
-            command1 = 'python /Xsoftware64/EM/EMAN2/bin/e2proc2d.py {} ' \
-                       '{} --average'.format(flist,e2proc2d_out)
-            command2 = 'dosefgpu_driftcorr {} -fcs {}'.format(
-                e2proc2d_out, motioncorr_out)
-            command3 = 'rm {}'.format(e2proc2d_out)
-            os.system(command1)
-            os.system(command2)
-            os.system(command3)
+    
             
 if __name__ == '__main__':
     a = movie_processor()
