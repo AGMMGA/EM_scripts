@@ -244,7 +244,7 @@ class test_check_all_present(unittest.TestCase):
                 obj.check_all_present(l)
 
 class test_make_stack(unittest.TestCase):
-    
+    pass
     # implement this I am tired
 
     
