@@ -4,11 +4,12 @@ import shutil
 import os
 import glob
 import tempfile
+import multiprocessing
+
 from unittest import mock
 from unittest.mock import patch
 
 import mrc2jpg as m
-import mrc2jpg
 
 class test_files_operations(unittest.TestCase):
     
@@ -75,14 +76,21 @@ class test_files_operations(unittest.TestCase):
             
     def test_jpg_exists_no_force(self):
         os.mkdir(os.path.join(self.tempdir, 'jpgs'))
+        os.remove(os.path.join(self.tempdir, '2.mrc'))
+        os.remove(os.path.join(self.tempdir, '3.mrc'))
         with open(os.path.join(self.tempdir, 'jpgs', '1.jpg'),'w'):
             pass
         testargs = 'foo.py -i {}'.format(self.tempdir)
         with patch('sys.argv', testargs.split()):
             with patch('sys.stdout'):
-                with self.assertRaises(OSError):
+                with patch('builtins.print') as mock_print:
                     a = m.imageConverter()
                     a.main()
+        #the IOError exception is caught and handled. Here I am testing that
+        #the error message is actually printed as a proxy for the handling
+                    msg = '{}/1.jpg exists. Skipped. Use -f to force overwrite'.format(
+                                                self.tempdir)
+                    mock_print.assert_called_with(msg)
     
     def test_jpg_exists_and_force(self):
         os.mkdir(os.path.join(self.tempdir, 'jpgs'))
@@ -95,7 +103,7 @@ class test_files_operations(unittest.TestCase):
                 with patch('sys.stdout'):
                     a.main()
                 mock_remove.assert_called_with(self.outfiles[0])
-
+        
 class test_args_check(unittest.TestCase):
     
     def setUp(self):
@@ -180,4 +188,23 @@ class test_args_check(unittest.TestCase):
         testargs = 'foo.py --scale 4'
         with patch('sys.argv', testargs.split()):
             a = m.imageConverter()
-            self.assertEqual(a.scale, '--meanshrink 4')   
+            self.assertEqual(a.scale, '--meanshrink 4')
+            
+    def test_ncpus_default(self):
+        testargs = 'foo.py'
+        cpus = multiprocessing.cpu_count() -1
+        with patch('sys.argv', testargs.split()):
+            a = m.imageConverter()
+            self.assertEqual(a.n_cpus, cpus)   
+            
+    def test_ncpus_given_and_ok(self):
+        testargs = 'foo.py --n_cpus 4'
+        with patch('sys.argv', testargs.split()):
+            a = m.imageConverter()
+            self.assertEqual(a.n_cpus, 4)   
+            
+    def test_ncpus_too_many(self):
+        testargs = 'foo.py --n_cpus 200000000'
+        with patch('sys.argv', testargs.split()):
+            with self.assertRaises(SystemExit):
+                a = m.imageConverter()           

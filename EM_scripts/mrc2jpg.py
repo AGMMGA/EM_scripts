@@ -7,8 +7,8 @@ import sys
 import subprocess
 import argparse
 import errno
-import logging
-import time
+import multiprocessing
+from multiprocessing.dummy import Pool as ThreadPool
 
 
 
@@ -29,6 +29,7 @@ class imageConverter(object):
         parser.add_argument('--scale', help='Scale factor e.g. 4 shrinks by 4 '
                             'times')
         parser.add_argument('--lowpass', help='Lowpass resolution in Angstrom')
+        parser.add_argument('--n_cpus', help='How many cpus should be used. Default: all available -1')
         parser.parse_args(namespace=self) 
         return parser
         
@@ -69,12 +70,26 @@ class imageConverter(object):
                                                             1/int(self.lowpass))
             else:
                 sys.exit('{} is not a valid resolution')
-
+        #checking cpus
+        try:
+            cpu_max = multiprocessing.cpu_count()
+        except NotImplementedError:
+            cpu_max = 4
+            print ('I cannot detect the number of cpus on the system, defaulting to 4') 
+        
+        if not self.n_cpus:
+            self.n_cpus = cpu_max -1
+        else:
+            try:
+                self.n_cpus = int(self.n_cpus)
+            except TypeError:
+                sys.exit('please give an integer number for the --n_cpu parameter')
+            if self.n_cpus > cpu_max:
+                sys.exit('Only {0} CPUs are available on this system. Please make sure that n_cpus <= {0}'.format(cpu_max))
     
     def convert_image(self, mrcfile, force=False):
         err_encountered = False
-        outfile = os.path.join(self.o, (mrcfile.split('/')[-1].strip('.mrc') 
-                                        + '.jpg'))
+        outfile = os.path.join(self.o, (mrcfile.split('/')[-1].replace('.mrc', '.jpg')))
         if os.path.isfile(outfile) and not force:
             raise IOError(errno.EEXIST)
         elif os.path.isfile(outfile) and force:
@@ -106,14 +121,17 @@ class imageConverter(object):
         for f in sorted(mrclist):
             try:
                 self.convert_image(f, self.f)
-            except OSError as e:
-                if e.errno == 17:
-                    msg = '{} exists. Skipped. Use -f to force overwrite'.format(
+            except IOError:
+                msg = '{} exists. Skipped. Use -f to force overwrite'.format(
                             f.replace('.mrc','.jpg'))
-                    print(msg)
-                else:
-                    raise
+                print(msg)
     
+    def create_threads(self):
+        pool = ThreadPool(self.n_cpus)
+    
+    def make_commands(self, mrclist):
+        pass
+        
     def main(self):
         files = self.get_mrc_files()
         self.create_images(files)
