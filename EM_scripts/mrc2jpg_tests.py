@@ -1,12 +1,9 @@
-import sys
 import unittest
 import shutil
 import os
 import glob
 import tempfile
 import multiprocessing
-
-from unittest import mock
 from unittest.mock import patch
 
 import mrc2jpg as m
@@ -22,7 +19,7 @@ class test_files_operations(unittest.TestCase):
         self.infiles = [os.path.join(self.tempdir, i) for i in self.files]
         self.outfiles = [os.path.join(self.tempdir, 'jpgs', i.replace('.mrc','.jpg'))
                     for i in self.files]
-        self.calls = ['python /Xsoftware64/EM/EMAN2/bin/e2proc2d.py {} {}'.format(
+        self.calls = ['python2.7 /Xsoftware64/EM/EMAN2/bin/e2proc2d.py {} {}'.format(
                         self.infiles[i], self.outfiles[i]).split() for i in range(3)]
             
     def tearDown(self):
@@ -143,14 +140,15 @@ class test_args_check(unittest.TestCase):
         testargs = 'foo.py -o /nonexisting/dir/ -f'.format(self.tempdir)
         with patch('sys.argv', testargs.split()):
             with patch ('os.makedirs') as mock:
-                a = m.imageConverter()
+                m.imageConverter()
                 self.assertTrue(mock.called)
     
     def test_o_given_nonexisting_no_force(self):
         testargs = 'foo.py -o /nonexisting/path'
         with patch('sys.argv', testargs.split()):
-            with self.assertRaises(SystemExit):
-                a = m.imageConverter() 
+            with patch('os.makedirs'):
+                with self.assertRaises(SystemExit):
+                    m.imageConverter() 
     
     def test_process_default(self):
         with patch('sys.argv', ['foo.py']):
@@ -177,7 +175,7 @@ class test_args_check(unittest.TestCase):
         testargs = 'foo.py --lowpass forty'
         with patch('sys.argv', testargs.split()):
             with self.assertRaises(SystemExit):
-                a = m.imageConverter()
+                m.imageConverter()
             
     def test_scale_default(self):
         with patch('sys.argv', ['foo.py']):
@@ -207,4 +205,8 @@ class test_args_check(unittest.TestCase):
         testargs = 'foo.py --n_cpus 200000000'
         with patch('sys.argv', testargs.split()):
             with self.assertRaises(SystemExit):
-                a = m.imageConverter()           
+                m.imageConverter()   
+                
+                
+if __name__ == '__main__':
+    unittest.main()        

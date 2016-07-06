@@ -18,7 +18,7 @@ class imageConverter(object):
     def __init__(self):
         super(imageConverter, self).__init__()
         self.parse()
-        check = self.check_args()
+        self.check = self.check_args()
     
     def parse(self):
         parser = argparse.ArgumentParser()
@@ -34,24 +34,26 @@ class imageConverter(object):
         return parser
         
     def check_args(self):
+        #explicitly setting self.f if not present
+        if not self.f:
+            self.f = False
         #setting input dir and checking existence if supplied
         if not self.i:
             self.i = os.getcwd()
         else:
             if not os.path.isdir(self.i):
-                sys.exit()
-        #setting output dir and checking existence if supplied
+                sys.exit('The path {} does not exist. Use -f to create'.format(self.i))
+        #Setting default output dir to /jpgs and creating it if not existing. 
         if not self.o:
             self.o = os.path.join(self.i, 'jpgs')
             if not os.path.isdir(self.o):
                 os.makedirs(self.o)
-        else: #checking that path exists or creating it if -f is specified
-            if not os.path.isdir(self.o):
-                if not self.f:
-                    sys.exit('The path {} does not exist. '
-                             'Use -f to create'.format(self.o))
-                else:
-                    os.makedirs(self.o)
+        #if output dir is provided, checking that it exists and/or creating it
+        else:
+            if not os.path.isdir(self.o) and self.f:
+                os.makedirs(self.o)
+            if not os.path.isdir(self.o) and not self.f:
+                sys.exit('The path {} does not exist. Use -f to create'.format(self.o))
         #setting scale factor
         if not self.scale:
             self.scale = ''
@@ -87,14 +89,13 @@ class imageConverter(object):
             if self.n_cpus > cpu_max:
                 sys.exit('Only {0} CPUs are available on this system. Please make sure that n_cpus <= {0}'.format(cpu_max))
     
-    def convert_image(self, mrcfile, force=False):
-        err_encountered = False
+    def convert_image(self, mrcfile):
         outfile = os.path.join(self.o, (mrcfile.split('/')[-1].replace('.mrc', '.jpg')))
-        if os.path.isfile(outfile) and not force:
+        if os.path.isfile(outfile) and not self.f:
             raise IOError(errno.EEXIST)
-        elif os.path.isfile(outfile) and force:
+        elif os.path.isfile(outfile) and self.f:
             os.remove(outfile) #otherwise eman might make a stack
-        command = 'python /Xsoftware64/EM/EMAN2/bin/e2proc2d.py ' + \
+        command = 'python2.7 /Xsoftware64/EM/EMAN2/bin/e2proc2d.py ' + \
             '{lowpass} {scale} {mrc} {jpg}'.format(mrc=mrcfile, 
                                                    jpg=outfile,
                                                    scale = self.scale,
@@ -102,11 +103,12 @@ class imageConverter(object):
         command = command.split()
         s = subprocess.Popen(command, stdout=subprocess.PIPE, 
                              stderr = subprocess.PIPE)
-        out, err = s.communicate()
+        _, err = s.communicate()
         #EMAN2 might fail randomly
-        if 'Traceback' in str(err) and not force:
+        if 'Traceback' in str(err) and not self.f:
             sys.exit('EMAN2 failed with the following error: \n\n{}'.format(err))
         print ('Converted {}\n'.format(outfile.split('/')[-1]))
+        print (err)
     
     def get_mrc_files(self):
         files = glob.glob(os.path.join(self.i, '*.mrc'))
@@ -126,15 +128,29 @@ class imageConverter(object):
                             f.replace('.mrc','.jpg'))
                 print(msg)
     
-    def create_threads(self):
-        pool = ThreadPool(self.n_cpus)
-    
     def make_commands(self, mrclist):
-        pass
+        cmds = []
+        for file in mrclist:
+            outfile = os.path.join(self.o, (file.split('/')[-1].replace('.mrc', '.jpg')))
+            command = 'python /Xsoftware64/EM/EMAN2/bin/e2proc2d.py ' + \
+                    '{lowpass} {scale} {mrc} {jpg}'.format(mrc=file, 
+                                                       jpg=outfile,
+                                                       scale = self.scale,
+                                                       lowpass = self.lowpass)
+            cmds.append(command.split())
+        return cmds
+    
+    def create_images_parallel(self, mrclist):
+        if not os.path.isdir(self.o):
+            os.makedirs(self.o)
+        pool = ThreadPool(self.n_cpus)
+        _ = pool.map(self.convert_image, mrclist)
+        pool.close()
+        pool.join()
         
     def main(self):
         files = self.get_mrc_files()
-        self.create_images(files)
+        self.create_images_parallel(files)
     
 
 if __name__ == '__main__':
