@@ -80,7 +80,8 @@ def find_uniprot_in_pdb(PDB_list_nochain, pdb_folder):
 
 overwrite = True
 reparse_pdbseq = False
-new_subset = True
+new_subset = False
+recompute_clean = True
 n_entries = 10
 working_dir = '/home/andrea/git/EM_scripts/EM_scripts/PDB_mining/'
 pdbredo_seq_file = 'pdbredo_seqdb.txt'
@@ -122,8 +123,7 @@ else:
 if new_subset:
     #grab some subset of the pdb, download files and parse for uniprot xreferences
     os.mkdir(pdb_folder)
-    os.mkdir(uniprot_folder)
-        
+    os.mkdir(uniprot_folder)    
     #select a pseudo_random subset of entries by slicing the entries dict 
     #(which is in pseudo-random) order
     PDB_subset = list(entries.keys())[:n_entries]
@@ -134,6 +134,12 @@ if new_subset:
         pdbl.retrieve_pdb_file(entry, pdir=pdb_folder)
     #serialize the PDB list for future use
     serialize(PDB_subset, pdb_folder, pdb_list)
+    # parse the pdb headers for DBREF to uniprot
+    pdb_to_uniprot = find_uniprot_in_pdb(PDB_subset_nochain, pdb_folder)
+
+if recompute_clean:
+    PDB_subset = retrieve(pdb_folder, pdb_list)
+    PDB_subset_nochain = [x.split('_')[0] for x in PDB_subset]
     # parse the pdb headers for DBREF to uniprot
     pdb_to_uniprot = find_uniprot_in_pdb(PDB_subset_nochain, pdb_folder)
     #determine the uniprot references to fetch
@@ -168,15 +174,25 @@ if new_subset:
                 # possible format (3): A=1-367
                 try:
                     chain, __ = xref[-1].split('=')
+                    chain = chain.split('/') # A/B/C -> ['A','B','C']
                     start, stop = __.split('-')
                     clean[ref]['xrefs'].update({xref[1]: {'chain' : chain,
                                                           'start' : start,
                                                           'stop' : stop}})
                 except ValueError:
                     pass # who cares if we miss one
+    ### determine construct subsequence for each chain
+    for _, uniprot in clean.items():
+        for xref in uniprot['xrefs']:
+            try:
+                seq = uniprot['seq']
+                start = int(uniprot['xrefs'][xref]['start'])
+                stop = int(uniprot['xrefs'][xref]['stop'])
+                uniprot['xrefs'][xref].update({'construct':seq[start-1:stop-1]})
+            except ValueError:
+                pass #sometime start, stop are ''. Probably b/c of the E=1-100, F=2-105 format  
     serialize(clean, uniprot_folder, uniprot_file.replace('.','_clean.'))
 
-    
 elif not new_subset:
     #opening previous PDb list from pickle file
     PDB_subset = retrieve(pdb_folder, pdb_list)
@@ -186,5 +202,5 @@ elif not new_subset:
     # retrieve uniprot entries
     uniprot_records = retrieve(uniprot_folder, uniprot_file)
     clean = retrieve(uniprot_folder, uniprot_file.replace('.','_clean.'))
-pprint(clean)
 
+pprint(clean)
