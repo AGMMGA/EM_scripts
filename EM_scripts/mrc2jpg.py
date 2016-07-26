@@ -149,8 +149,8 @@ class imageConverter(object):
         pool.join()
         
     def main(self):
-        files = self.get_mrc_files()
-        self.create_images_parallel(files)
+            files = self.get_mrc_files()
+            self.create_images_parallel(files)
     
 
 if __name__ == '__main__':

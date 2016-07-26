@@ -4,6 +4,7 @@ import logging
 import os
 import re
 import sys
+import shutil
 from math import ceil, log10
 
 '''
@@ -14,10 +15,10 @@ class Micrograph_renamer(object):
     
     def __init__(self):
         super(Micrograph_renamer, self).__init__()
-        self.parse_arguments()
+        self.build_parser()
         self.check = self.check_args()
     
-    def parse_arguments(self):
+    def build_parser(self):
         parser = argparse.ArgumentParser()
         parser.add_argument('-input_dir', help='Parent directory containing the data.'
                             ' Default: current directory')
@@ -31,21 +32,19 @@ class Micrograph_renamer(object):
                             'Default: _frames_n#. "#" marks the positional number'
                             'An underscore wll be prepended')
         f = parser.add_mutually_exclusive_group()
-        f.add_argument('-n_frames', help='The number of frames per image'
-                       'Default: 7 (0-6).')
+        f.add_argument('-n_frames', help='The number of frames collected per image',
+                       default=7, type=int)
         f.add_argument('-first_last', help='The first and last frames to be '
-                       'integrated by motioncorr, comma separated, starting '
-                       'from zero. Default 0,6')
+                       'integrated by motioncorr if -redo_integration is selected,'
+                       'comma separated, starting from zero. Default 0,6')
         parser.add_argument('-f', help='Forces overwrite of existing files. '
                             'Otherwise existing files will be skipped', \
                             action = 'store_true')
         parser.add_argument('-jpg_dir', help='Export jpegs to this directory ')
-        parser.add_argument('-raw_pattern', help='some kind of pattern that denotes the'
-                            'raw data images / frames')
-        parser.add_argument('-move_integrated', help='also move the pre-integrated'
-                            ' micrographs to the specified directory, or to'
-                            ' -frames_dir if not specified', nargs = '?',
-                            default=True, const=True)
+        parser.add_argument('-EPU_image_pattern', help='some kind of pattern that denotes the'
+                            'raw data images / frames. use "*" to take all mrc files')
+        parser.add_argument('-redo_integration', help='re-integrate frames = True',
+                            action = 'store_true')
         parser.parse_args(namespace=self)
         return parser
     
@@ -60,17 +59,11 @@ class Micrograph_renamer(object):
         #output directory
         if not os.path.isdir(self.output_dir):
             os.mkdir(self.output_dir)
-        
-        #integrated micrographs directory
-        if self.move_integrated == True: #no arg
-            self.move_integrated = self.output_dir
-        elif self.move_integrated: #folder as arg
-            if not os.path.isdir(self.move_integrated):
-                os.mkdir(self.move_integrated)
                 
         #counting the digits in the filename
         if '#' in self.filename:
             self.digits = self.filename.count('#')
+            self.filename = self.filename.replace('#','{}',1).replace('#','')
         else:
             sys.exit('Please indicate with # where the incremental numbers'
                      ' are in the filename.\n'
@@ -80,8 +73,9 @@ class Micrograph_renamer(object):
         if self.jpg_dir:
             if not os.path.isdir(self.jpg_dir):
                 os.mkdir(self.jpg_dir)
+                
         #checking if we need to integrate different frames
-        if self.n_frames:
+        if self.n_frames and not self.first_last:
             self.first_frame = 0
             self.last_frame = int(self.n_frames)-1
         elif self.first_last:
@@ -95,14 +89,11 @@ class Micrograph_renamer(object):
                 e.msg = ('Please provide two numbers, comma separated for'
                           'first and last frame, e.g. 1,5')
                 raise
-        elif not self.n_frames or self.first_last:
-            self.first_frame = 0
-            self.last_frame = 6
         
         #sanity check of frames_suffix
         if not self.frames_suffix:
             self.frames_suffix = 'frames_n{}'
-            self.frames_digits = ceil(log10(self.last_frame-self.first_frame))
+            self.frames_digits = ceil(log10(self.last_frame-self.first_frame))    
         else: #counting how many digits we expect for frame number
             if '#' not in self.frames_suffix:
                 sys.exit('Please provide a # symbol in the frame_suffix to mark'
@@ -111,45 +102,112 @@ class Micrograph_renamer(object):
                 #we happily ignore the number of '#' provided by the user
                 #but we must remove all '#' except one for the program to work
                 #hence the regexp hack
-                if self.frames_suffix.startswith('_'):
-                    self.frames_suffix = self.frames_suffix[1:]
                 temp = self.frames_suffix
                 for pos in re.findall(re.compile('#'), self.frames_suffix)[1:]:
                     temp = temp[:temp.find(pos)]+temp[temp.find(pos)+1:]
                 self.frames_suffix = temp.replace('#','{}')
                 self.frame_digits = ceil(log10(self.last_frame-self.first_frame))
         
-        #setting the deafult raw_pattern
-        if not self.raw_pattern:
-            self.raw_pattern = '/Data/FoilHole'        
+        #setting the default EPU_image_pattern
+        if not self.EPU_image_pattern: # '' should be a valid pattern (i.e. all mrc files)
+            self.EPU_image_pattern = '/Data/FoilHole'
+        if self.EPU_image_pattern == '*':
+            self.EPU_image_pattern = ''        
         return 1    
         
-    def find_files(self):
-        pattern = os.path.join(self.input_dir + '**/*' + self.raw_pattern + '*.mrc')
-        print (pattern)
-        frames_list = glob2.glob(pattern)
-        if not self.move_integrated:
-            frames_list = [i for i in frames_list if self.frames_suffix[:-3] in i]
-            print (self.frames_suffix[:-3])
-            return frames_list
-        else:
-            frames_list = [i for i in frames_list if self.frames_suffix[:-3] in i]
-            integrated_list = [i for i in frames_list  \
-                               if self.frames_suffix[:-3] not in i]
-            return frames_list, integrated_list
-          
+    def find_mrc_files(self, input_dir, EPU_image_pattern, frames_suffix):
+        '''finds all the frames and integrated images that match the EPU image pattern
+           and frame pattern'''
+        mrc_list = glob2.glob(os.path.join(input_dir + '**/*.mrc'))
+        mrc_list = [i for i in mrc_list if EPU_image_pattern in i] #discard wide fields
+        frames_list = [i for i in mrc_list if frames_suffix[:-3] in i]# all frames
+        integrated_list = [i for i in mrc_list
+                           if self.frames_suffix[:-3] not in i]#all non-frames
+        return frames_list, integrated_list
+    
+    def find_mrcs_files(self):
+        pass #TODO
+    
     def start_logger(self):
         log = os.path.join(self.output_dir, 'process_movies.log')
         logger = logging.getLogger(__name__) 
         logging.basicConfig(filename = log, level=logging.INFO)
         return logger
     
+    def rename_files(self, frames_list, integrated_list):
+        '''
+        logic: 
+        1 - start from integrated images, find corresponding frames, rename all
+        2 - move frames to frames folder, images to images folder
+        3 - if frames are left that have no corresponding image -> move them to orphan_frames
+        4 - if images have less than the specified number of frames -> move image
+        to orphan_images, frames to orphan_frames
+        5 - re-rename all with proper zerofilling
+        '''
+        image_counter = 1
+        image_dir = os.path.join(self.output_dir, 'integrated')
+        frames_dir = os.path.join(self.output_dir, 'frames')
+        orphan_images_dir = os.path.join(self.output_dir, 'orphan_integrated')
+        missing_frames_dir = os.path.join(self.output_dir, 'missing_frames')
+        orphan_frames_dir = os.path.join(self.output_dir, 'orphan_frames')
+        os.makedirs(image_dir, exist_ok=True)
+        os.makedirs(frames_dir, exist_ok=True)
+        imgtemp = integrated_list.copy()
+        frametemp = frames_list.copy()
+        est_digits = ceil(log10(len(integrated_list))) #log10(# of images) rounded up
+        while imgtemp:
+            img = imgtemp.pop()
+            root, _ = os.path.splitext(img)
+            frame_root = root + self.frames_suffix
+            frame_name = frame_root + '.mrc'
+            t = frame_root.replace('{}','')
+            frames = [f for f in frametemp if t in f]
+            frames.sort() #let's attempt to keep the date order more or less
+            if len(frames) == self.n_frames:
+                #rename original image
+                number = str(image_counter).zfill(est_digits)  
+                new_img_name = os.path.join(image_dir,
+                                    os.path.basename(self.filename.format(number)))
+                shutil.move(img, new_img_name)
+                #rename frames
+                n = self.first_frame
+                for frame in frames:
+                    new_frame_name = new_img_name.replace('.', 
+                                        self.frames_suffix.format(str(n)) + '.')
+                    new_frame_name = os.path.join(frames_dir,
+                                                  os.path.basename(new_frame_name))
+                    shutil.move(frame, new_frame_name)
+                    
+                    n += 1
+                    frametemp.remove(frame) # smaller list to traverse next time
+            elif len(frames) != self.n_frames:
+                os.makedirs(missing_frames_dir, exist_ok=True)
+                os.makedirs(orphan_images_dir, exist_ok=True)
+                new_img_name = os.path.join(orphan_images_dir, os.path.basename(img))
+                shutil.move(img, new_img_name)
+                n = self.first_frame
+                for frame in frames:
+                    new_frame_name = os.path.join(missing_frames_dir, os.path.basename(frame))
+                    shutil.move(frame, new_frame_name)
+                    frametemp.remove(frame)
+                n += 1
+            image_counter +=1
+        if len(frametemp)>0: #some orphan frames are left
+            for orphan_frame in frametemp:
+                os.makedirs(orphan_frames_dir, exist_ok=True)
+                a,b = (orphan_frame, os.path.join(orphan_frames_dir,
+                                                    os.path.basename(orphan_frame)))
+                shutil.move(a,b)
+                
     def main(self):
         self.start_logger()
-        if self.move_integrated:
-            frames_list, integrated_list = self.find_files()
-        else:
-            frames_list = self.find_files()
+        frames_list, integrated_list = self.find_mrc_files(self.input_dir, 
+                                                           self.EPU_image_pattern, 
+                                                           self.frames_suffix)
+        frames_list = frames_list.sorted()
+        integrated_list = integrated_list.sorted()
+        if self.redo_integration:
+            mrcs_list = self.find_mrcs_files() #todo
         print (frames_list[:4])
         print(integrated_list[:4])
 
