@@ -255,7 +255,7 @@ def main():
             
     #### plotting section
     if plot:
-        fig1, (maxvalue_plot, minvalue_plot, avgvalue_plot) = plt.subplots(3)
+        fig1, (maxvalue_plot, minvalue_plot, avgvalue_plot) = plt.subplots(3,3)
         #plotting the histogram of max intensity
         y = [y[1] for y in maxval]
         good_y = [y[1] for y in good_images]
@@ -274,11 +274,13 @@ def main():
         minvalue_plot.set_title('Minimum intensity distribution (bins = {})'.format(hist_bins))
         
         #same for avg intensity
+        
         y = [y[1] for y in avgval]
         avgvalue_plot.hist([x[1] for x in avgval], hist_bins, normed=1, facecolor='red', alpha=0.75)
         x, gauss, median, std = fit_gaussian_to_histogram(y, bins=hist_bins)
         avgvalue_plot.plot(x, gauss,'k', linewidth=2)
         avgvalue_plot.set_title('Average intensity distribution (bins = {})'.format(hist_bins))
+        
         
         fig2, (n_vs_avg, defocus_vs_avg, resolution_vs_avg, defocus_vs_resolution) = plt.subplots(4)
         fig2.subplots_adjust(hspace = 0.5)
