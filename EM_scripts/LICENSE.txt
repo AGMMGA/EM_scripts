@@ -1,3 +1,0 @@
-Copyright (c) [2016] [Andrea Giovanni Murachelli]
-
-The code is not ready for use. 
