@@ -17,7 +17,7 @@ class test_bin_procedure(unittest.TestCase):
                '     0.100000 122807.015625    14.000000     0.150301'
                '     3.899599\n']
         result = sh.select_from_star(img_list, self.body)
-        self.assertEqual(result, exp
+        self.assertEqual(result, exp)
 
     def test_calculate_too_many_bins(self):
         img_list = ['a','b']
