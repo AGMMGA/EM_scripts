@@ -8,6 +8,7 @@ import subprocess
 import argparse
 import errno
 import multiprocessing
+from PIL import Image
 from multiprocessing.dummy import Pool as ThreadPool
 
 
@@ -30,6 +31,8 @@ class imageConverter(object):
                             'times')
         parser.add_argument('--lowpass', help='Lowpass resolution in Angstrom')
         parser.add_argument('--n_cpus', help='How many cpus should be used. Default: all available -1')
+        parser.add_argument('--noflip', help='Does NOT rotate and flip the jpg to conform with relion coordinates',
+                            action='store_true')
         parser.parse_args(namespace=self) 
         return parser
         
@@ -107,8 +110,19 @@ class imageConverter(object):
         #EMAN2 might fail randomly
         if 'Traceback' in str(err) and not self.f:
             sys.exit('EMAN2 failed with the following error: \n\n{}'.format(err))
-        print ('Converted {}\n'.format(outfile.split('/')[-1]))
         print (err)
+        print(_)
+        print ('Converted {}'.format(outfile.split('/')[-1]))
+        #finally, flip horizontal and rotate 180 because EMAN2 chooses different
+        #coordinates compared to relion which we will use downstream
+        if not self.noflip:
+            self.flip_and_rotate(outfile)
+            print('Flipped & rotated {}'.format(outfile.split('/')[-1]))
+         
+    def flip_and_rotate(self, image):
+        img =  Image.open(image)
+        img = img.transpose(Image.FLIP_LEFT_RIGHT).transpose(Image.ROTATE_180)
+        return img.save(image, "JPEG")
     
     def get_mrc_files(self):
         files = glob.glob(os.path.join(self.i, '*.mrc'))
@@ -122,7 +136,7 @@ class imageConverter(object):
             os.makedirs(self.o)
         for f in sorted(mrclist):
             try:
-                self.convert_image(f, self.f)
+                self.convert_image(f)
             except IOError:
                 msg = '{} exists. Skipped. Use -f to force overwrite'.format(
                             f.replace('.mrc','.jpg'))
@@ -151,6 +165,7 @@ class imageConverter(object):
     def main(self):
             files = self.get_mrc_files()
             self.create_images_parallel(files)
+#             self.create_images(files) #testing
     
 
 if __name__ == '__main__':
