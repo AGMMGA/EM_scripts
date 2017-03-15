@@ -1,0 +1,768 @@
+INFO:root:# gpu   pwr  temp    sm   mem   enc   dec  mclk  pclk
+
+INFO:root:# Idx     W     C     %     %     %     %   MHz   MHz
+
+INFO:root:    0     1    42     0     9     0     0   405   405
+
+INFO:root:    0     1    42    38    28     0     0   405   405
+
+INFO:root:    0     1    42     9    15     0     0   405   405
+
+INFO:root:    0     1    42     1    10     0     0   405   405
+
+INFO:root:    0     1    42     4    12     0     0   405   405
+
+INFO:root:    0     1    41     1     9     0     0   405   405
+
+INFO:root:    0     1    42     1    10     0     0   405   405
+
+INFO:root:    0     1    41     0     9     0     0   405   405
+
+INFO:root:    0     1    41     1     9     0     0   405   405
+
+INFO:root:    0     1    41     1    10     0     0   405   405
+
+INFO:root:    0     1    41     1    10     0     0   405   405
+
+INFO:root:    0     1    41     1     9     0     0   405   405
+
+INFO:root:    0     1    41     1    10     0     0   405   405
+
+INFO:root:    0     1    41     1     9     0     0   405   405
+
+INFO:root:    0     1    41     0     9     0     0   405   405
+
+INFO:root:    0     1    41     2    10     0     0   405   405
+
+INFO:root:    0     1    41     3    11     0     0   405   405
+
+INFO:root:    0     1    40     2    10     0     0   405   405
+
+INFO:root:    0     1    40     1     9     0     0   405   405
+
+INFO:root:    0     1    40     1    10     0     0   405   405
+
+INFO:root:    0     1    40     2    10     0     0   405   405
+
+INFO:root:    0     1    40     4    11     0     0   405   405
+
+INFO:root:    0     1    40     1     9     0     0   405   405
+
+INFO:root:    0     1    40     1     9     0     0   405   405
+
+INFO:root:    0     1    40     1    10     0     0   405   405
+
+INFO:root:    0     1    40     1     9     0     0   405   405
+
+INFO:root:    0     1    40     1     9     0     0   405   405
+
+INFO:root:    0     1    40     1    10     0     0   405   405
+
+INFO:root:    0     1    40     3    11     0     0   405   405
+
+INFO:root:    0     1    39     1     9     0     0   405   405
+
+INFO:root:    0     1    39     4    11     0     0   405   405
+
+INFO:root:    0     1    39     1     9     0     0   405   405
+
+INFO:root:    0     1    39     1    10     0     0   405   405
+
+INFO:root:    0     1    39     2    10     0     0   405   405
+
+INFO:root:    0     1    39     1     9     0     0   405   405
+
+INFO:root:    0     1    39     1     9     0     0   405   405
+
+INFO:root:    0     1    39     3    11     0     0   405   405
+
+INFO:root:    0     1    39     6    11     0     0   405   405
+
+INFO:root:    0     1    39     1    10     0     0   405   405
+
+INFO:root:    0     1    39     1     9     0     0   405   405
+
+INFO:root:    0     1    39     1     9     0     0   405   405
+
+INFO:root:    0     1    39     1     9     0     0   405   405
+
+INFO:root:    0     1    38     1     9     0     0   405   405
+
+INFO:root:    0     1    38     1     9     0     0   405   405
+
+INFO:root:# gpu   pwr  temp    sm   mem   enc   dec  mclk  pclk
+
+INFO:root:# Idx     W     C     %     %     %     %   MHz   MHz
+
+INFO:root:    0     1    38     1     9     0     0   405   405
+
+INFO:root:    0     1    38     1    10     0     0   405   405
+
+INFO:root:    0     1    38     1    10     0     0   405   405
+
+INFO:root:    0     1    38     1    10     0     0   405   405
+
+INFO:root:    0     1    38     1     9     0     0   405   405
+
+INFO:root:    0     1    38     1    10     0     0   405   405
+
+INFO:root:    0     1    38     1     9     0     0   405   405
+
+INFO:root:    0     1    38     1    10     0     0   405   405
+
+INFO:root:    0     1    38     9    14     0     0   405   405
+
+INFO:root:    0     1    38     4    11     0     0   405   405
+
+INFO:root:    0     1    38     1     9     0     0   405   405
+
+INFO:root:    0     1    38     1    10     0     0   405   405
+
+INFO:root:    0     1    38     1    10     0     0   405   405
+
+INFO:root:    0     1    38     4    11     0     0   405   405
+
+INFO:root:    0     1    38     5    11     0     0   405   405
+
+INFO:root:    0     1    38     1     9     0     0   405   405
+
+INFO:root:    0     1    38    35    28     0     0   405   405
+
+INFO:root:    0     1    38    12    15     0     0   405   405
+
+INFO:root:    0     2    37     1     9     0     0   405   405
+
+INFO:root:    0     1    37     1    10     0     0   405   405
+
+INFO:root:    0     1    37    13    18     0     0   405   405
+
+INFO:root:    0     2    37     9    13     0     0   405   405
+
+INFO:root:    0     1    37     1     9     0     0   405   405
+
+INFO:root:    0     1    37     1     9     0     0   405   405
+
+INFO:root:    0     1    37     2    10     0     0   405   405
+
+INFO:root:    0     1    37     2    10     0     0   405   405
+
+INFO:root:    0     3    38     5     2     0     0  2505  1045
+
+INFO:root:    0    13    40    81     2     0     0  2505  1124
+
+INFO:root:    0    13    41    80     2     0     0  2505  1124
+
+INFO:root:    0    10    41    79     2     0     0  2505  1124
+
+INFO:root:    0    13    41    82     2     0     0  2505  1124
+
+INFO:root:    0    12    42    81     2     0     0  2505  1124
+
+INFO:root:    0    12    42    83     2     0     0  2505  1124
+
+INFO:root:    0    13    42    82     2     0     0  2505  1124
+
+INFO:root:    0    13    42    82     2     0     0  2505  1124
+
+INFO:root:    0    12    43    82     2     0     0  2505  1124
+
+INFO:root:    0    13    43    83     2     0     0  2505  1124
+
+INFO:root:    0     9    43    81     2     0     0  2505  1124
+
+INFO:root:    0    12    44    88     2     0     0  2505  1124
+
+INFO:root:    0    13    44    83     2     0     0  2505  1124
+
+INFO:root:    0    12    44    79     2     0     0  2505  1124
+
+INFO:root:    0    14    44    74     2     0     0  2505  1124
+
+INFO:root:    0    14    44    81     2     0     0  2505  1124
+
+INFO:root:    0     9    44    82     2     0     0  2505  1124
+
+INFO:root:# gpu   pwr  temp    sm   mem   enc   dec  mclk  pclk
+
+INFO:root:# Idx     W     C     %     %     %     %   MHz   MHz
+
+INFO:root:    0    14    45    81     2     0     0  2505  1124
+
+INFO:root:    0    14    44    87     2     0     0  2505  1124
+
+INFO:root:    0    11    45    87     2     0     0  2505  1124
+
+INFO:root:    0    10    45    88     2     0     0  2505  1124
+
+INFO:root:    0     7    45    87     2     0     0  2505  1124
+
+INFO:root:    0     6    45    87     2     0     0  2505  1124
+
+INFO:root:    0    14    46    86     2     0     0  2505  1124
+
+INFO:root:    0    12    46    85     2     0     0  2505  1124
+
+INFO:root:    0    12    46    92     2     0     0  2505  1124
+
+INFO:root:    0    12    46    90     2     0     0  2505  1124
+
+INFO:root:    0    14    46    85     2     0     0  2505  1124
+
+INFO:root:    0    12    46    85     2     0     0  2505  1124
+
+INFO:root:    0    13    46    84     2     0     0  2505  1124
+
+INFO:root:    0    12    46    84     2     0     0  2505  1124
+
+INFO:root:    0    11    46    86     2     0     0  2505  1124
+
+INFO:root:    0    14    46    83     2     0     0  2505  1124
+
+INFO:root:    0    12    47    89     2     0     0  2505  1124
+
+INFO:root:    0    16    47    83     2     0     0  2505  1124
+
+INFO:root:    0    11    47    86     2     0     0  2505  1124
+
+INFO:root:    0    11    47    89     2     0     0  2505  1124
+
+INFO:root:    0    12    48    86     2     0     0  2505  1124
+
+INFO:root:    0    13    47    84     2     0     0  2505  1124
+
+INFO:root:    0    13    48    92     2     0     0  2505  1124
+
+INFO:root:    0    15    48    87     2     0     0  2505  1124
+
+INFO:root:    0    15    48    89     2     0     0  2505  1124
+
+INFO:root:    0    14    48    88     2     0     0  2505  1124
+
+INFO:root:    0    15    48    86     2     0     0  2505  1124
+
+INFO:root:    0    13    48    87     2     0     0  2505  1124
+
+INFO:root:    0    14    48    87     2     0     0  2505  1124
+
+INFO:root:    0    14    49    89     2     0     0  2505  1124
+
+INFO:root:    0    13    49    88     2     0     0  2505  1124
+
+INFO:root:    0    12    49    88     2     0     0  2505  1124
+
+INFO:root:    0    15    49    86     2     0     0  2505  1124
+
+INFO:root:    0    11    49    87     2     0     0  2505  1124
+
+INFO:root:    0    15    49    89     3     0     0  2505  1124
+
+INFO:root:    0    15    49    86     2     0     0  2505  1124
+
+INFO:root:    0    14    49    85     2     0     0  2505  1124
+
+INFO:root:    0    15    49    86     2     0     0  2505  1124
+
+INFO:root:    0    10    50    81     2     0     0  2505  1124
+
+INFO:root:    0    12    50    83     2     0     0  2505  1124
+
+INFO:root:    0    14    50    82     2     0     0  2505  1124
+
+INFO:root:    0    13    49    82     2     0     0  2505  1124
+
+INFO:root:    0    10    50    82     2     0     0  2505  1124
+
+INFO:root:    0    14    50    81     2     0     0  2505  1124
+
+INFO:root:# gpu   pwr  temp    sm   mem   enc   dec  mclk  pclk
+
+INFO:root:# Idx     W     C     %     %     %     %   MHz   MHz
+
+INFO:root:    0    12    50    79     2     0     0  2505  1124
+
+INFO:root:    0    16    50    81     2     0     0  2505  1124
+
+INFO:root:    0    10    50    89     2     0     0  2505  1124
+
+INFO:root:    0    13    50    89     2     0     0  2505  1124
+
+INFO:root:    0    11    50    83     2     0     0  2505  1124
+
+INFO:root:    0    10    50    87     2     0     0  2505  1124
+
+INFO:root:    0    13    51    84     2     0     0  2505  1124
+
+INFO:root:    0    11    50    91     2     0     0  2505  1124
+
+INFO:root:    0    14    50    88     2     0     0  2505  1124
+
+INFO:root:    0    14    51    89     2     0     0  2505  1124
+
+INFO:root:    0    13    51    87     2     0     0  2505  1124
+
+INFO:root:    0    16    51    89     2     0     0  2505  1124
+
+INFO:root:    0    13    51    85     2     0     0  2505  1124
+
+INFO:root:    0    12    51    85     2     0     0  2505  1124
+
+INFO:root:    0    14    51    82     2     0     0  2505  1124
+
+INFO:root:    0    14    51    84     2     0     0  2505  1124
+
+INFO:root:    0    13    51    86     2     0     0  2505  1124
+
+INFO:root:    0    15    52    90     2     0     0  2505  1124
+
+INFO:root:    0    15    51    83     2     0     0  2505  1124
+
+INFO:root:    0    11    51    81     2     0     0  2505  1124
+
+INFO:root:    0    11    51    84     2     0     0  2505  1124
+
+INFO:root:    0    13    52    90     2     0     0  2505  1124
+
+INFO:root:    0    15    52    84     2     0     0  2505  1124
+
+INFO:root:    0    13    52    90     2     0     0  2505  1124
+
+INFO:root:    0    14    52    85     2     0     0  2505  1124
+
+INFO:root:    0    14    52    90     2     0     0  2505  1124
+
+INFO:root:    0    14    52    89     2     0     0  2505  1124
+
+INFO:root:    0    14    52    86     2     0     0  2505  1124
+
+INFO:root:    0    14    52    79     2     0     0  2505  1124
+
+INFO:root:    0    15    52    77     2     0     0  2505  1124
+
+INFO:root:    0    16    52    81     2     0     0  2505  1124
+
+INFO:root:    0    12    52    84     2     0     0  2505  1124
+
+INFO:root:    0    11    52    89     2     0     0  2505  1124
+
+INFO:root:    0    11    52    88     2     0     0  2505  1124
+
+INFO:root:    0    14    52    82     2     0     0  2505  1124
+
+INFO:root:    0    12    53    82     2     0     0  2505  1124
+
+INFO:root:    0    15    53    86     2     0     0  2505  1124
+
+INFO:root:    0    14    53    88     2     0     0  2505  1124
+
+INFO:root:    0    15    53    85     2     0     0  2505  1124
+
+INFO:root:    0    17    53    85     2     0     0  2505  1124
+
+INFO:root:    0    15    53    87     2     0     0  2505  1124
+
+INFO:root:    0    15    53    87     2     0     0  2505  1124
+
+INFO:root:    0    15    53    89     2     0     0  2505  1124
+
+INFO:root:    0    15    53    87     2     0     0  2505  1124
+
+INFO:root:# gpu   pwr  temp    sm   mem   enc   dec  mclk  pclk
+
+INFO:root:# Idx     W     C     %     %     %     %   MHz   MHz
+
+INFO:root:    0    14    53    85     2     0     0  2505  1124
+
+INFO:root:    0    16    53    88     2     0     0  2505  1124
+
+INFO:root:    0    14    53    89     2     0     0  2505  1124
+
+INFO:root:    0    13    53    81     2     0     0  2505  1124
+
+INFO:root:    0    12    53    83     2     0     0  2505  1124
+
+INFO:root:    0    16    53    89     2     0     0  2505  1124
+
+INFO:root:    0    16    54    87     2     0     0  2505  1124
+
+INFO:root:    0    14    54    89     2     0     0  2505  1124
+
+INFO:root:    0    14    54    88     2     0     0  2505  1124
+
+INFO:root:    0    14    54    90     2     0     0  2505  1124
+
+INFO:root:    0    13    54    88     2     0     0  2505  1124
+
+INFO:root:    0    12    54    86     2     0     0  2505  1124
+
+INFO:root:    0    14    53    88     2     0     0  2505  1124
+
+INFO:root:    0    15    54    86     2     0     0  2505  1124
+
+INFO:root:    0    14    54    87     2     0     0  2505  1124
+
+INFO:root:    0    16    54    85     2     0     0  2505  1124
+
+INFO:root:    0    15    54    87     2     0     0  2505  1124
+
+INFO:root:    0    11    54    87     2     0     0  2505  1124
+
+INFO:root:    0    14    54    84     2     0     0  2505  1124
+
+INFO:root:    0    14    54    84     2     0     0  2505  1124
+
+INFO:root:    0    16    55    88     2     0     0  2505  1124
+
+INFO:root:    0    14    54    88     2     0     0  2505  1124
+
+INFO:root:    0    15    54    81     2     0     0  2505  1124
+
+INFO:root:    0    12    54    87     2     0     0  2505  1124
+
+INFO:root:    0    15    55    88     2     0     0  2505  1124
+
+INFO:root:    0    13    55    89     2     0     0  2505  1124
+
+INFO:root:    0    15    55    84     2     0     0  2505  1124
+
+INFO:root:    0    13    55    84     2     0     0  2505  1124
+
+INFO:root:    0    12    55    90     2     0     0  2505  1124
+
+INFO:root:    0    12    55    90     2     0     0  2505  1124
+
+INFO:root:    0    15    55    83     2     0     0  2505  1124
+
+INFO:root:    0    12    55    88     2     0     0  2505  1124
+
+INFO:root:    0    13    55    86     2     0     0  2505  1124
+
+INFO:root:    0    12    55    92     2     0     0  2505  1124
+
+INFO:root:    0    14    55    86     2     0     0  2505  1124
+
+INFO:root:    0    13    55    89     2     0     0  2505  1124
+
+INFO:root:    0    15    55    90     2     0     0  2505  1124
+
+INFO:root:    0    14    55    84     2     0     0  2505  1124
+
+INFO:root:    0    16    55    93     2     0     0  2505  1124
+
+INFO:root:    0    12    55    88     2     0     0  2505  1124
+
+INFO:root:    0    15    55    88     2     0     0  2505  1124
+
+INFO:root:    0    13    55    94     2     0     0  2505  1124
+
+INFO:root:    0    16    56    87     2     0     0  2505  1124
+
+INFO:root:    0    15    55    81     2     0     0  2505  1124
+
+INFO:root:# gpu   pwr  temp    sm   mem   enc   dec  mclk  pclk
+
+INFO:root:# Idx     W     C     %     %     %     %   MHz   MHz
+
+INFO:root:    0    14    55    87     2     0     0  2505  1124
+
+INFO:root:    0    13    55    84     2     0     0  2505  1124
+
+INFO:root:    0    16    55    85     2     0     0  2505  1124
+
+INFO:root:    0    14    55    85     2     0     0  2505  1124
+
+INFO:root:    0    16    56    87     2     0     0  2505  1124
+
+INFO:root:    0    13    55    87     2     0     0  2505  1124
+
+INFO:root:    0    15    56    90     2     0     0  2505  1124
+
+INFO:root:    0    16    56    93     2     0     0  2505  1124
+
+INFO:root:    0    14    56    90     2     0     0  2505  1124
+
+INFO:root:    0    14    56    90     2     0     0  2505  1124
+
+INFO:root:    0    16    56    91     2     0     0  2505  1124
+
+INFO:root:    0    15    56    82     2     0     0  2505  1124
+
+INFO:root:    0    13    56    81     2     0     0  2505  1124
+
+INFO:root:    0    14    56    77     2     0     0  2505  1124
+
+INFO:root:    0    15    56    85     2     0     0  2505  1124
+
+INFO:root:    0    13    56    87     2     0     0  2505  1124
+
+INFO:root:    0    14    56    90     2     0     0  2505  1124
+
+INFO:root:    0    13    56    83     2     0     0  2505  1124
+
+INFO:root:    0    14    56    82     2     0     0  2505  1124
+
+INFO:root:    0    12    56    84     2     0     0  2505  1124
+
+INFO:root:    0    14    56    84     2     0     0  2505  1124
+
+INFO:root:    0    14    56    87     2     0     0  2505  1124
+
+INFO:root:    0    14    56    86     2     0     0  2505  1124
+
+INFO:root:    0    17    56    88     2     0     0  2505  1124
+
+INFO:root:    0    13    56    89     2     0     0  2505  1124
+
+INFO:root:    0    14    56    85     2     0     0  2505  1124
+
+INFO:root:    0    15    56    91     2     0     0  2505  1124
+
+INFO:root:    0    16    56    87     2     0     0  2505  1124
+
+INFO:root:    0    13    56    87     2     0     0  2505  1124
+
+INFO:root:    0    15    56    90     2     0     0  2505  1124
+
+INFO:root:    0    17    56    85     2     0     0  2505  1124
+
+INFO:root:    0    13    56    80     2     0     0  2505  1124
+
+INFO:root:    0    13    56    82     2     0     0  2505  1124
+
+INFO:root:    0    14    56    91     2     0     0  2505  1124
+
+INFO:root:    0    14    56    89     2     0     0  2505  1124
+
+INFO:root:    0    14    57    89     2     0     0  2505  1124
+
+INFO:root:    0    14    57    89     2     0     0  2505  1124
+
+INFO:root:    0    14    57    89     2     0     0  2505  1124
+
+INFO:root:    0    13    57    85     2     0     0  2505  1124
+
+INFO:root:    0    16    57    86     2     0     0  2505  1124
+
+INFO:root:    0    15    57    89     2     0     0  2505  1124
+
+INFO:root:    0    15    57    85     2     0     0  2505  1124
+
+INFO:root:    0    16    57    93     2     0     0  2505  1124
+
+INFO:root:    0    15    57    91     2     0     0  2505  1124
+
+INFO:root:# gpu   pwr  temp    sm   mem   enc   dec  mclk  pclk
+
+INFO:root:# Idx     W     C     %     %     %     %   MHz   MHz
+
+INFO:root:    0    15    57    85     2     0     0  2505  1124
+
+INFO:root:    0    16    57    83     2     0     0  2505  1124
+
+INFO:root:    0    13    56    84     2     0     0  2505  1124
+
+INFO:root:    0    12    57    85     2     0     0  2505  1124
+
+INFO:root:    0    16    57    86     2     0     0  2505  1124
+
+INFO:root:    0    13    57    86     2     0     0  2505  1124
+
+INFO:root:    0    15    57    85     2     0     0  2505  1124
+
+INFO:root:    0    15    57    86     2     0     0  2505  1124
+
+INFO:root:    0    17    57    88     2     0     0  2505  1124
+
+INFO:root:    0    14    57    89     2     0     0  2505  1124
+
+INFO:root:    0    15    57    87     2     0     0  2505  1124
+
+INFO:root:    0    15    57    85     2     0     0  2505  1124
+
+INFO:root:    0    15    57    90     2     0     0  2505  1124
+
+INFO:root:    0    15    57    88     2     0     0  2505  1124
+
+INFO:root:    0    14    57    87     2     0     0  2505  1124
+
+INFO:root:    0    16    57    88     2     0     0  2505  1124
+
+INFO:root:    0    13    57    87     2     0     0  2505  1124
+
+INFO:root:    0    15    57    87     2     0     0  2505  1124
+
+INFO:root:    0    15    57    81     2     0     0  2505  1124
+
+INFO:root:    0    14    57    77     2     0     0  2505  1124
+
+INFO:root:    0    15    57    84     2     0     0  2505  1124
+
+INFO:root:    0    15    57    83     2     0     0  2505  1124
+
+INFO:root:    0    15    57    89     2     0     0  2505  1124
+
+INFO:root:    0    15    57    86     2     0     0  2505  1124
+
+INFO:root:    0    16    57    85     2     0     0  2505  1124
+
+INFO:root:    0    14    57    86     2     0     0  2505  1124
+
+INFO:root:    0    10    57    82     2     0     0  2505  1124
+
+INFO:root:    0    15    57    87     2     0     0  2505  1124
+
+INFO:root:    0    13    57    87     2     0     0  2505  1124
+
+INFO:root:    0     5    55     0     1     0     0  2505  1124
+
+INFO:root:    0     5    55     0     1     0     0  2505  1124
+
+INFO:root:    0     2    54     2     1     0     0  2505   901
+
+INFO:root:    0     3    54     0     1     0     0  2505   901
+
+INFO:root:    0     4    54     3     2     0     0  2505  1045
+
+INFO:root:    0    17    56    98     4     0     0  2505  1124
+
+INFO:root:    0    18    57    99     1     0     0  2505  1124
+
+INFO:root:    0     5    54     0     1     0     0  2505  1124
+
+INFO:root:    0     5    54     0     1     0     0  2505  1124
+
+INFO:root:    0     5    54     0     1     0     0  2505  1124
+
+INFO:root:    0     5    54     0     1     0     0  2505  1124
+
+INFO:root:    0     5    54     0     1     0     0  2505  1124
+
+INFO:root:    0     5    53     0     1     0     0  2505  1124
+
+INFO:root:    0     5    53     0     1     0     0  2505  1124
+
+INFO:root:    0     5    53     0     1     0     0  2505  1124
+
+INFO:root:# gpu   pwr  temp    sm   mem   enc   dec  mclk  pclk
+
+INFO:root:# Idx     W     C     %     %     %     %   MHz   MHz
+
+INFO:root:    0     5    53     0     1     0     0  2505  1124
+
+INFO:root:    0     5    53     2     2     0     0  2505  1124
+
+INFO:root:    0     5    52     2     1     0     0  2505  1124
+
+INFO:root:    0     5    52     0     1     0     0  2505  1124
+
+INFO:root:    0     5    52     0     1     0     0  2505  1124
+
+INFO:root:    0     5    52     0     1     0     0  2505  1124
+
+INFO:root:    0     5    52     0     1     0     0  2505  1124
+
+INFO:root:    0     5    52     0     1     0     0  2505  1124
+
+INFO:root:    0     5    52     1     1     0     0  2505  1124
+
+INFO:root:    0     5    52     0     1     0     0  2505  1124
+
+INFO:root:    0     5    51     0     1     0     0  2505  1124
+
+INFO:root:    0     5    51     0     1     0     0  2505  1124
+
+INFO:root:    0     5    52     0     1     0     0  2505  1124
+
+INFO:root:    0     5    51     0     1     0     0  2505  1124
+
+INFO:root:    0     5    51     0     1     0     0  2505  1124
+
+INFO:root:    0     5    51     0     1     0     0  2505  1124
+
+INFO:root:    0     4    51     0     1     0     0  2505  1124
+
+INFO:root:    0     5    51     0     1     0     0  2505  1124
+
+INFO:root:    0     5    51     0     1     0     0  2505  1124
+
+INFO:root:    0     4    51     0     1     0     0  2505  1124
+
+INFO:root:    0     4    51     2     2     0     0  2505  1124
+
+INFO:root:    0     4    51     0     1     0     0  2505  1124
+
+INFO:root:    0     4    51     0     1     0     0  2505  1124
+
+INFO:root:    0     5    50     0     1     0     0  2505  1124
+
+INFO:root:    0     4    50     0     1     0     0  2505  1124
+
+INFO:root:    0     4    50     1     2     0     0  2505  1124
+
+INFO:root:    0     4    50     0     1     0     0  2505  1124
+
+INFO:root:    0     4    50     0     1     0     0  2505  1124
+
+INFO:root:    0     4    50     0     1     0     0  2505  1124
+
+INFO:root:    0     4    50     0     1     0     0  2505  1124
+
+INFO:root:    0     4    50     0     1     0     0  2505  1124
+
+INFO:root:    0     5    50     0     1     0     0  2505  1124
+
+INFO:root:    0     1    48     5    11     0     0   405   405
+
+INFO:root:    0     1    48     0     9     0     0   405   405
+
+INFO:root:    0     2    48     0     9     0     0   405   405
+
+INFO:root:    0     1    47     0     9     0     0   405   405
+
+INFO:root:    0     1    47     6    12     0     0   405   405
+
+INFO:root:    0     1    47     0     9     0     0   405   405
+
+INFO:root:    0     1    47     0     9     0     0   405   405
+
+INFO:root:    0     1    47     0     9     0     0   405   405
+
+INFO:root:    0     1    47     5    12     0     0   405   405
+
+INFO:root:    0     1    46     0     9     0     0   405   405
+
+INFO:root:    0     1    46     0     9     0     0   405   405
+
+INFO:root:    0     1    46     0     9     0     0   405   405
+
+INFO:root:# gpu   pwr  temp    sm   mem   enc   dec  mclk  pclk
+
+INFO:root:# Idx     W     C     %     %     %     %   MHz   MHz
+
+INFO:root:    0     1    46     3    11     0     0   405   405
+
+INFO:root:    0     1    46     3    10     0     0   405   405
+
+INFO:root:    0     2    46     0     9     0     0   405   405
+
+INFO:root:    0     1    45     0     9     0     0   405   405
+
+INFO:root:    0     1    45     4    10     0     0   405   405
+
+INFO:root:    0     1    45     0     9     0     0   405   405
+
+INFO:root:    0     1    45     0     9     0     0   405   405
+
+INFO:root:    0     1    45     0     9     0     0   405   405
+
+INFO:root:    0     2    45     1    10     0     0   405   405
+
+INFO:root:    0     1    45     0     9     0     0   405   405
+
+INFO:root:    0     1    44     1     9     0     0   405   405
+
+INFO:root:    0     1    44     0     9     0     0   405   405
+
+INFO:root:    0     1    44     8    15     0     0   405   405
+
+INFO:root:    0     1    44     2    10     0     0   405   405
+

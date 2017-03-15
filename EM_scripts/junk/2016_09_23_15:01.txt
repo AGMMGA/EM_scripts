@@ -1,0 +1,44 @@
+INFO:root:# gpu   pwr  temp    sm   mem   enc   dec  mclk  pclk
+
+INFO:root:# Idx     W     C     %     %     %     %   MHz   MHz
+
+INFO:root:    0     1    33     1    10     0     0   405   405
+
+INFO:root:    0     1    33     1     9     0     0   405   405
+
+INFO:root:    0     1    32     1    10     0     0   405   405
+
+INFO:root:    0     1    32     0     9     0     0   405   405
+
+INFO:root:    0     1    32     1    10     0     0   405   405
+
+INFO:root:    0     1    32     0     9     0     0   405   405
+
+INFO:root:    0     1    32     3    10     0     0   405   405
+
+INFO:root:    0     1    33     3    10     0     0   405   405
+
+INFO:root:    0     1    32     0     9     0     0   405   405
+
+INFO:root:    0     1    32     1     9     0     0   405   405
+
+INFO:root:    0    14    37    86     2     0     0  2505  1124
+
+INFO:root:    0     8    39    88     2     0     0  2505  1124
+
+INFO:root:    0    14    40    84     2     0     0  2505  1124
+
+INFO:root:    0    11    41    86     2     0     0  2505  1124
+
+INFO:root:    0    14    42    86     2     0     0  2505  1124
+
+INFO:root:    0    11    43    87     2     0     0  2505  1124
+
+INFO:root:    0    14    44    82     2     0     0  2505  1124
+
+INFO:root:    0    13    45    81     2     0     0  2505  1124
+
+INFO:root:    0    12    45    85     2     0     0  2505  1124
+
+INFO:root:    0    13    46    88     2     0     0  2505  1124
+

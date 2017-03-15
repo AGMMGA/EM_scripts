@@ -1,0 +1,70 @@
+2016/10/25 10:03:36	2016/10/25 10:03:37	 39232/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/jpgs/test.jpg
+2016/10/25 10:03:37	2016/10/25 10:03:38	 39236/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc /home/andrea/workspace/temp_image/jpgs/test2.jpg
+2016/10/25 10:03:38	2016/10/25 10:03:39	 39240/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/jpgs/test3.jpg
+2016/10/25 10:03:47	2016/10/25 10:03:48	 39267/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/jpgs/test.jpg
+2016/10/25 10:04:14	2016/10/25 10:04:15	 39334/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/jpgs/test.jpg
+2016/10/25 10:04:30	2016/10/25 10:04:31	 39356/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/jpgs/test.jpg
+2016/10/25 10:04:31	2016/10/25 10:04:32	 39362/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc /home/andrea/workspace/temp_image/jpgs/test2.jpg
+2016/10/25 10:04:33	2016/10/25 10:04:34	 39367/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/jpgs/test3.jpg
+2016/10/25 10:04:52	2016/10/25 10:04:53	 39427/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/jpgs/test.jpg
+2016/10/25 10:05:04	2016/10/25 10:05:05	 39480/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/jpgs/test.jpg
+2016/10/25 10:05:38	2016/10/25 10:05:39	 39551/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/jpgs/test.jpg
+2016/10/25 10:07:45	2016/10/25 10:07:46	 39742/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/jpgs/test.jpg
+2016/10/25 10:07:47	2016/10/25 10:07:48	 39752/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc /home/andrea/workspace/temp_image/jpgs/test2.jpg
+2016/10/25 10:07:49	2016/10/25 10:07:50	 39756/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/jpgs/test3.jpg
+2016/10/25 10:08:40	2016/10/25 10:08:41	 39845/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/jpgs/test.jpg
+2016/10/25 10:08:42	2016/10/25 10:08:43	 39869/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc /home/andrea/workspace/temp_image/jpgs/test2.jpg
+2016/10/25 10:08:44	2016/10/25 10:08:45	 39873/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/jpgs/test3.jpg
+2016/10/25 10:09:31	2016/10/25 10:09:31	 39954/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/jpgs/test.jpg
+2016/10/25 10:09:33	2016/10/25 10:09:33	 39961/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc /home/andrea/workspace/temp_image/jpgs/test2.jpg
+2016/10/25 10:09:35	2016/10/25 10:09:36	 39965/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/jpgs/test3.jpg
+2016/10/25 10:09:46	2016/10/25 10:09:47	 40016/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/jpgs/test.jpg
+2016/10/25 10:09:48	2016/10/25 10:09:49	 40023/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc /home/andrea/workspace/temp_image/jpgs/test2.jpg
+2016/10/25 10:09:50	2016/10/25 10:09:51	 40027/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/jpgs/test3.jpg
+2016/10/25 10:12:59	2016/10/25 10:13:00	 40371/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/jpgs/test.jpg
+2016/10/25 10:13:00	2016/10/25 10:13:01	 40377/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc /home/andrea/workspace/temp_image/jpgs/test2.jpg
+2016/10/25 10:13:02	2016/10/25 10:13:02	 40382/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/jpgs/test3.jpg
+2016/10/25 10:13:10	2016/10/25 10:13:11	 40402/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/jpgs/test.jpg
+2016/10/25 10:13:12	2016/10/25 10:13:13	 40410/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc /home/andrea/workspace/temp_image/jpgs/test2.jpg
+2016/10/25 10:13:14	2016/10/25 10:13:15	 40414/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/jpgs/test3.jpg
+2016/10/25 10:13:36	2016/10/25 10:13:37	 40453/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/jpgs/test.jpg
+2016/10/25 10:13:37	2016/10/25 10:13:38	 40456/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc /home/andrea/workspace/temp_image/jpgs/test2.jpg
+2016/10/25 10:13:38	2016/10/25 10:13:39	 40459/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/jpgs/test3.jpg
+2016/10/28 09:31:41	2016/10/28 09:31:42	 58361/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/test3.hdf
+2016/10/28 09:33:12	2016/10/28 09:33:13	 58481/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/test3.hdf
+2016/10/28 09:33:13	2016/10/28 09:33:14	 58486/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc /home/andrea/workspace/temp_image/test2.hdf
+2016/10/28 09:33:15	2016/10/28 09:33:16	 58490/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/test.hdf
+2016/10/28 09:52:23	2016/10/28 09:52:24	 59309/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/test3.hdf
+2016/10/28 09:52:24	2016/10/28 09:52:25	 59316/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc /home/andrea/workspace/temp_image/test2.hdf
+2016/10/28 09:52:25	2016/10/28 09:52:26	 59320/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/test.hdf
+2016/10/28 10:00:15	2016/10/28 10:00:16	 59926/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/test3.hdf
+2016/10/28 10:00:17	2016/10/28 10:00:17	 59930/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc /home/andrea/workspace/temp_image/test2.hdf
+2016/10/28 10:00:18	2016/10/28 10:00:19	 59933/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/test.hdf
+2016/10/28 10:02:59	2016/10/28 10:02:59	 60266/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/test3.hdf
+2016/10/28 10:02:59	2016/10/28 10:03:01	 60264/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/test.hdf
+2016/10/28 10:02:59	2016/10/28 10:03:01	 60265/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc /home/andrea/workspace/temp_image/test2.hdf
+2016/10/28 10:12:36	incomplete         	 60919/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/test3@/highpass/*.mrc
+2016/10/28 10:12:36	incomplete         	 60920/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc /home/andrea/workspace/temp_image/test2@/highpass/*.mrc
+2016/10/28 10:12:36	incomplete         	 60918/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/test@/highpass/*.mrc
+2016/10/28 10:12:59	incomplete         	 60997/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/test@/highpass/*.mrc
+2016/10/28 10:12:59	incomplete         	 60999/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/test3@/highpass/*.mrc
+2016/10/28 10:12:59	incomplete         	 60998/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc /home/andrea/workspace/temp_image/test2@/highpass/*.mrc
+2016/10/28 10:13:53	incomplete         	 61097/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/test3@/highpass/*.mrc
+2016/10/28 10:14:34	incomplete         	 61168/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc /home/andrea/workspace/temp_image/test3/highpass/.mrc
+2016/10/28 11:53:02	incomplete         	 66157/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc @/highpass/*.mrc
+2016/10/28 11:53:30	incomplete         	 66186/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc @highpass/*.mrc
+2016/10/28 11:55:20	incomplete         	 66334/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc @highpass/*.mrc
+2016/10/28 11:55:44	incomplete         	 66471/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc @highpass/*.mrc
+2016/10/28 13:01:29	incomplete         	 68994/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc highpass/@*.mrc
+2016/10/28 13:01:58	incomplete         	 69045/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc highpass/@.mrc
+2016/10/28 13:05:21	2016/10/28 13:05:22	 69271/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc @.mrc
+2016/10/28 13:05:37	2016/10/28 13:05:38	 69299/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc @.mrc
+2016/10/28 13:05:38	2016/10/28 13:05:39	 69304/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc @.mrc
+2016/10/28 13:05:40	2016/10/28 13:05:41	 69308/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc @.mrc
+2016/10/28 13:09:31	2016/10/28 13:09:32	 69500/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test3.mrc @.mrc
+2016/10/28 13:09:33	2016/10/28 13:09:33	 69505/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test2.mrc @.mrc
+2016/10/28 13:09:34	2016/10/28 13:09:34	 69510/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc @.mrc
+2016/10/28 13:38:44	incomplete         	 71130/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc test_highpass.mrc filter.lowpass.gauss:cutoff_freq=0.1
+2016/10/28 13:39:06	2016/10/28 13:39:09	 71174/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc test_highpass.mrc --process filter.lowpass.gauss:cutoff_freq=0.1
+2016/10/28 13:40:58	incomplete         	 71321/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc test_highpass.mrc --process /home/andrea/workspace/temp_image/test_highpass.mrc
+2016/10/28 13:41:27	2016/10/28 13:41:30	 71385/    -2	granaatappel	/Xsoftware64/EM/EMAN2/bin/e2proc2d.py /home/andrea/workspace/temp_image/test.mrc /home/andrea/workspace/temp_image/test_highpass.mrc --process filter.lowpass.gauss:cutoff_freq=0.1
