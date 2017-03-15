@@ -101,6 +101,30 @@ class test_files_operations(unittest.TestCase):
                 with patch('sys.stdout'):
                     a.main()
                 mock_remove.assert_called_with(self.outfiles[0])
+    
+    @unittest.mock.patch.object(m.imageConverter, 'flip_and_rotate')
+    def test_noflip_not_set(self, mock_flip_and_rotate):
+        testargs = 'foo.py -i {} -f'.format(self.tempdir)
+        with patch('sys.argv', testargs.split()):
+            with patch('subprocess.Popen') as mock_popen:
+                #mocking subprocess.communicate because we don't want to run eman
+                mock_popen.return_value.communicate.return_value = [0,1]
+                a = m.imageConverter()
+                with patch('sys.stdout'): #silent please
+                    a.main()              
+                    self.assertEqual(mock_flip_and_rotate.call_count, 3)
+    
+    @unittest.mock.patch.object(m.imageConverter, 'flip_and_rotate')
+    def test_noflip_set(self, mock_flip_and_rotate):
+        testargs = 'foo.py -i {} -f --noflip'.format(self.tempdir)
+        with patch('sys.argv', testargs.split()):
+            with patch('subprocess.Popen') as mock_popen:
+                #mocking subprocess.communicate because we don't want to run eman
+                mock_popen.return_value.communicate.return_value = [0,1]
+                a = m.imageConverter()
+                with patch('sys.stdout'): #silent please
+                    a.main()              
+                    self.assertEqual(mock_flip_and_rotate.call_count, 0)
         
 class test_args_check(unittest.TestCase):
     
@@ -207,7 +231,6 @@ class test_args_check(unittest.TestCase):
         with patch('sys.argv', testargs.split()):
             with self.assertRaises(SystemExit):
                 m.imageConverter()   
-                
                 
 if __name__ == '__main__':
     unittest.main()        
